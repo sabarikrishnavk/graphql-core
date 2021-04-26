@@ -29,11 +29,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
-dependencyManagement {
-    imports {
-        mavenBom("org.jetbrains.kotlin:kotlin-bom:1.4.0-rc")
-    }
-}
+
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     generateClient = true
     packageName = "com.example.demo.generated"
@@ -49,6 +45,8 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
-
+//tasks.generateJava{
+//    enabled = true
+//}
 
 

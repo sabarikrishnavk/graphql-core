@@ -24,3 +24,14 @@ sourceSets {
 repositories {
     mavenCentral()
 }
+
+tasks.generateJava{
+    enabled = false
+}
+
+tasks.bootJar{
+    enabled = false
+}
+tasks.jar{
+    enabled = false
+}

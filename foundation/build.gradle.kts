@@ -8,10 +8,11 @@
 //
 plugins {
 
-    id("org.springframework.boot")
-    id("io.spring.dependency-management")
     kotlin("jvm")
     kotlin("plugin.spring")
+
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
 
     id("com.netflix.dgs.codegen")
 }
@@ -40,7 +41,9 @@ tasks.bootJar{
 tasks.jar{
     enabled = true
 }
-
+tasks.generateJava{
+    enabled = false
+}
 
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
