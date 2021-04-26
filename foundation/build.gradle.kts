@@ -26,13 +26,13 @@ repositories {
 }
 //
 dependencies {
-    implementation ("org.springframework.boot:spring-boot-starter")
+    api ("org.springframework.boot:spring-boot-starter")
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
 
-    implementation("com.graphql-java:graphql-java-extended-scalars:1.0")
-    implementation("com.github.javafaker:javafaker:1.+")
+    api("com.graphql-java:graphql-java-extended-scalars:1.0")
+    api("com.github.javafaker:javafaker:1.+")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 tasks.bootJar{
