@@ -29,7 +29,7 @@ dependencies {
 
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     generateClient = true
-    packageName = "com.example.demo.generated"
+    packageName = "com.galaxy.catalog.codegen"
 }
 
 tasks.withType<KotlinCompile> {

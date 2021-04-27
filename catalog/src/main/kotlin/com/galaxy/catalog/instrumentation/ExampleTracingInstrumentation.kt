@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.demo.instrumentation
+package com.galaxy.catalog.instrumentation
 
 import graphql.ExecutionResult
 import graphql.execution.instrumentation.InstrumentationContext

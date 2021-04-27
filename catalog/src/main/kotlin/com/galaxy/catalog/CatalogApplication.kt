@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.example.demo
+package com.galaxy.catalog
 
-import com.example.blog.toSlug
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class DemoApplication
+class CatalogApplication
 
 fun main(args: Array<String>) {
 
-	println("Test".toSlug())
-	runApplication<DemoApplication>(*args)
+	runApplication<CatalogApplication>(*args)
 }

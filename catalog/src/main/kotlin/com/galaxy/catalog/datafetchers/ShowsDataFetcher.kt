@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.demo.datafetchers
+package com.galaxy.catalog.datafetchers
 
-import com.example.demo.generated.DgsConstants
-import com.example.demo.generated.types.Show
-import com.example.demo.services.ShowsService
+import com.galaxy.catalog.codegen.DgsConstants
+import com.galaxy.catalog.codegen.types.Sku
+import com.galaxy.catalog.services.SkuService
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsData
 import com.netflix.graphql.dgs.DgsQuery
@@ -26,17 +26,17 @@ import com.netflix.graphql.dgs.InputArgument
 import org.springframework.beans.factory.annotation.Autowired
 
 @DgsComponent
-class ShowsDataFetcher(private val showsService: ShowsService) {
+class ShowsDataFetcher(private val showsService: SkuService) {
     /**
      * This datafetcher resolves the shows field on Query.
      * It uses an @InputArgument to get the titleFilter from the Query if one is defined.
      */
     @DgsQuery
-    fun shows(@InputArgument titleFilter : String?): List<Show> {
+    fun shows(@InputArgument titleFilter : String?): List<com.galaxy.catalog.codegen.types.Sku> {
         return if(titleFilter != null) {
-            showsService.shows().filter { it.title.contains(titleFilter) }
+            showsService.skus().filter { it.name.contains(titleFilter) }
         } else {
-            showsService.shows()
+            showsService.skus()
         }
     }
 }

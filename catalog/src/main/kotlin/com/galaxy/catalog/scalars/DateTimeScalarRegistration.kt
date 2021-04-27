@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.demo.scalars
+package com.galaxy.catalog.scalars
 
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsRuntimeWiring

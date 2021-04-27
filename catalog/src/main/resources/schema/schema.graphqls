@@ -1,40 +1,44 @@
 type Query {
-    shows(titleFilter: String): [Show]
+    skus(skuid: String): [Sku]
 }
 
 type Mutation {
     addReview(review: SubmittedReview): [Review]
-    addArtwork(showId: Int!, upload: Upload!): [Image]! @skipcodegen
+#    addArtwork(showId: Int!, upload: Upload!): [Image]! @skipcodegen
 }
 
 type Subscription {
-    reviewAdded(showId: Int!): Review
+    reviewAdded(skuId: Int!): Review
 }
 
-type Show {
-    id: Int!
-    title: String!
-    releaseYear: Int
+type Sku {
+    id: String!
+    name: String!
+    price: Int
+    shortdescription: String
+    longdescription: String
     reviews: [Review]
-    artwork: [Image]
+    images: [Image]
 }
+
 
 type Review {
-    username: String
+    userId: String
     starScore: Int
     submittedDate: DateTime
 }
 
 input SubmittedReview {
     showId: Int!
-    username: String!
+    userId: String!
     starScore: Int!
 }
 
 type Image {
+    imageType: String
     url: String
 }
 
 scalar DateTime
-scalar Upload
-directive @skipcodegen on FIELD_DEFINITION
+#scalar Upload
+#directive @skipcodegen on FIELD_DEFINITION
