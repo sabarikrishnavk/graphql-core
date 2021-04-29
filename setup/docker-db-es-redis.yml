@@ -4,7 +4,6 @@ services:
      image: docker.elastic.co/kibana/kibana:7.3.0
      ports:
          - 5601:5601
-         
   elasticsearch:
      environment:
             - "discovery.type=single-node"
@@ -13,3 +12,17 @@ services:
      image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
      ports:
          - 9200:9200
+
+  postgres:
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgrespassword
+  redis:
+    image: "redis:alpine"
+volumes:
+  db_data:

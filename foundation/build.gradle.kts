@@ -27,12 +27,15 @@ repositories {
 //
 dependencies {
     api ("org.springframework.boot:spring-boot-starter")
-    testImplementation ("org.springframework.boot:spring-boot-starter-test")
+
+    api(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
+    api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
 
     api("com.graphql-java:graphql-java-extended-scalars:1.0")
     api("com.github.javafaker:javafaker:1.+")
 
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 tasks.bootJar{

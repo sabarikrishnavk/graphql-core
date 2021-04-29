@@ -20,8 +20,8 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
-    api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
+//    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
+
 
     api(project(":foundation"))
 
@@ -32,7 +32,7 @@ dependencies {
 
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     generateClient = true
-    packageName = "com.galaxy.catalog.codegen"
+    packageName = "com.galaxy.auth.codegen"
 }
 
 tasks.withType<KotlinCompile> {
@@ -49,8 +49,8 @@ tasks.withType<Test> {
 docker {
     springBootApplication {
         baseImage.set("openjdk:11-jdk-slim")
-        ports.set(listOf(8081))
-        images.set(setOf("galaxy-catalog:1.0", "galaxy-catalog:latest"))
+        ports.set(listOf(8082))
+        images.set(setOf("galaxy-auth:1.0", "galaxy-auth:latest"))
         jvmArgs.set(listOf("-Dspring.profiles.active=production", "-Xmx2048m"))
     }
 }

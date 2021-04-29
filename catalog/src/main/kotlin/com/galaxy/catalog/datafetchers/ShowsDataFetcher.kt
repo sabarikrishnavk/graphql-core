@@ -16,14 +16,10 @@
 
 package com.galaxy.catalog.datafetchers
 
-import com.galaxy.catalog.codegen.DgsConstants
-import com.galaxy.catalog.codegen.types.Sku
 import com.galaxy.catalog.services.SkuService
 import com.netflix.graphql.dgs.DgsComponent
-import com.netflix.graphql.dgs.DgsData
 import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument
-import org.springframework.beans.factory.annotation.Autowired
 
 @DgsComponent
 class ShowsDataFetcher(private val showsService: SkuService) {
