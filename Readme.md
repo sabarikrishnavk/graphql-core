@@ -58,7 +58,11 @@ Sample commands in redis-cli
 Docker build
 ---
 
-Catalog API
+Catalog API:
+
+Generate graphql java file
+
+> gradle catalog:generateJava
 
 > gradle catalog:dockerBuildImage
 
@@ -67,6 +71,9 @@ Catalog API
 
 Auth API
 
+Generate 
+> gradle auth:generateJava
+ 
 > gradle auth:dockerBuildImage
 
 > docker run -d -p 8082:8082 --name galaxy-catalog-docker galaxy-catalog:latest

@@ -21,7 +21,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
-@ComponentScan("com.galaxy.foundation")
+@ComponentScan("com.galaxy.foundation","com.galaxy.catalog")
 class CatalogApplication
 
 fun main(args: Array<String>) {

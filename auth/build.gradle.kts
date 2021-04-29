@@ -20,11 +20,9 @@ repositories {
 }
 
 dependencies {
-//    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
-
-
     api(project(":foundation"))
 
+    //implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 

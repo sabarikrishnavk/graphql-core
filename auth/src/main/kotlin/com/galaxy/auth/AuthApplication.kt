@@ -6,7 +6,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
-@ComponentScan("com.galaxy.foundation")
+@ComponentScan("com.galaxy.foundation","com.galaxy.auth")
 class AuthApplication
 
 fun main(args: Array<String>) {

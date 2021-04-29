@@ -1,17 +1,48 @@
 
 package com.galaxy.auth.services
 
+import com.galaxy.auth.codegen.types.AuthPayload
+import com.galaxy.auth.codegen.types.User
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.impl.TextCodec
 import org.springframework.stereotype.Service
+import java.time.Instant
+import java.util.*
+
 
 interface UserService {
-    fun users(): List<com.galaxy.auth.codegen.types.User>
+    fun user(userId: String): User
+    fun signup(email: String, password: String, username: String): AuthPayload?
+    fun signin(email: String, password: String): AuthPayload?
 }
 
 @Service
 class BasicUserService : UserService {
-    override fun users(): List<com.galaxy.auth.codegen.types.User> {
-        return listOf(
-//            com.galaxy.catalog.codegen.types.Sku(id = 1, title = "Stranger Things", releaseYear = 2016),
-        )
+    override fun user(userId: String): User {
+        return User(userId,"user","some@galaxy.com" )
+    }
+    override fun signup(email: String, password: String, username: String): AuthPayload? {
+        val user = User(UUID.randomUUID().toString(),username,email)
+
+        val token = Jwts.builder()
+            .setIssuer("Stormpath")
+            .setSubject("msilverman")
+            .claim("name", "Micah Silverman")
+            .claim("scope", "admins")
+            .setIssuedAt(Date())
+            .compact()
+        return AuthPayload(token,user)
+    }
+    override fun signin(email: String, password: String ): AuthPayload? {
+        val user = User(UUID.randomUUID().toString(),"",email)
+
+        val token = Jwts.builder()
+            .setIssuer("Stormpath")
+            .setSubject("msilverman")
+            .claim("name", "Micah Silverman")
+            .claim("scope", "admins")
+            .setIssuedAt(Date())
+            .compact()
+        return AuthPayload(token,user)
     }
 }
