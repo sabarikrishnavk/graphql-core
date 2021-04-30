@@ -29,10 +29,10 @@ class ShowsDataFetcher(private val showsService: SkuService) {
      * It uses an @InputArgument to get the titleFilter from the Query if one is defined.
      */
     @DgsQuery
-//    @Secured
-    fun skus(@InputArgument titleFilter : String?): List<com.galaxy.catalog.codegen.types.Sku> {
-        return if(titleFilter != null) {
-            showsService.skus().filter { it.name.contains(titleFilter) }
+    @Secured("guest")
+    fun skus(@InputArgument skuid : String?): List<com.galaxy.catalog.codegen.types.Sku> {
+        return if(skuid != null) {
+            showsService.skus().filter { it.name.contains(skuid) }
         } else {
             showsService.skus()
         }

@@ -23,7 +23,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
-@SpringBootApplication(exclude = arrayOf(SecurityAutoConfiguration::class))
+@SpringBootApplication//(exclude = arrayOf(SecurityAutoConfiguration::class))
 @ComponentScan("com.galaxy.foundation","com.galaxy.catalog")
 @EnableConfigurationProperties(JwtProperties::class)
 class CatalogApplication

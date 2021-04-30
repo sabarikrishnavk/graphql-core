@@ -2,13 +2,11 @@
 package com.galaxy.auth.services
 
 import com.galaxy.auth.codegen.types.AuthPayload
-import com.galaxy.auth.codegen.types.User
+import com.galaxy.foundation.JwtUtils
 import com.galaxy.foundation.jwt.JwtProperties
+import com.galaxy.foundation.jwt.JwtUser
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Bean
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -16,37 +14,17 @@ import java.util.*
 @Service
 class UserService (private val jwtProperties: JwtProperties) {
 
-    fun user(userId: String): User {
-        return User(userId,"user","some@galaxy.com" )
-    }
     fun signup(email: String, password: String, username: String): AuthPayload? {
-        val user = User(UUID.randomUUID().toString(),username,email)
-        val role = "user"
 
-        val token = Jwts.builder()
-            .setIssuer("Galaxy")
-            .setSubject(username)
-            .claim("name", username)
-            .claim("scope", user)
-            .setIssuedAt(Date())
-            .signWith(SignatureAlgorithm.HS512, jwtProperties.secretkey)
-            .compact()
-        return AuthPayload(token,user)
+        val jwtUser= JwtUser( UUID.randomUUID().toString(),username,email, listOf("user"));
+        val token = JwtUtils(jwtProperties).generateAccessToken(jwtUser);
+        return AuthPayload(token,true)
     }
      fun signin(email: String, password: String ): AuthPayload? {
 
-         val username = email;
-         val role = "user"
-
-        val user = User(UUID.randomUUID().toString(),username,email)
-        val token = Jwts.builder()
-            .setIssuer("Galaxy")
-            .setSubject(username)
-            .claim("name", username)
-            .claim("scope", role)
-            .setIssuedAt(Date())
-            .signWith(SignatureAlgorithm.HS512, jwtProperties.secretkey)
-            .compact()
-        return AuthPayload(token,user)
+         val username = "dbuser" //Authenticate and get username and other details.
+         val jwtUser= JwtUser( UUID.randomUUID().toString(),username,email, listOf("user"));
+         val token = JwtUtils(jwtProperties).generateAccessToken(jwtUser);
+         return AuthPayload(token,true)
     }
 }
