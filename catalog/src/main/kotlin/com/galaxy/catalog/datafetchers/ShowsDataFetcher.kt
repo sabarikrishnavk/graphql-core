@@ -20,6 +20,7 @@ import com.galaxy.catalog.services.SkuService
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsQuery
 import com.netflix.graphql.dgs.InputArgument
+import org.springframework.security.access.annotation.Secured
 
 @DgsComponent
 class ShowsDataFetcher(private val showsService: SkuService) {
@@ -28,7 +29,8 @@ class ShowsDataFetcher(private val showsService: SkuService) {
      * It uses an @InputArgument to get the titleFilter from the Query if one is defined.
      */
     @DgsQuery
-    fun shows(@InputArgument titleFilter : String?): List<com.galaxy.catalog.codegen.types.Sku> {
+//    @Secured
+    fun skus(@InputArgument titleFilter : String?): List<com.galaxy.catalog.codegen.types.Sku> {
         return if(titleFilter != null) {
             showsService.skus().filter { it.name.contains(titleFilter) }
         } else {

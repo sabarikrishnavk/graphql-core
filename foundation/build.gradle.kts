@@ -34,6 +34,7 @@ dependencies {
     api("com.graphql-java:graphql-java-extended-scalars:1.0")
     api("com.github.javafaker:javafaker:1.+")
 
+    api("org.springframework.boot:spring-boot-starter-security")
     api("io.jsonwebtoken:jjwt-api:0.11.2")
     api("io.jsonwebtoken:jjwt-impl:0.11.2")
     api("io.jsonwebtoken:jjwt-jackson:0.11.2")

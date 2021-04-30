@@ -47,7 +47,7 @@ tasks.withType<Test> {
 docker {
     springBootApplication {
         baseImage.set("openjdk:11-jdk-slim")
-        ports.set(listOf(8082))
+        ports.set(listOf(8081))
         images.set(setOf("galaxy-auth:1.0", "galaxy-auth:latest"))
         jvmArgs.set(listOf("-Dspring.profiles.active=production", "-Xmx2048m"))
     }
