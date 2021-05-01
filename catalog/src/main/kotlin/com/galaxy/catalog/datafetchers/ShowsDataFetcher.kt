@@ -32,8 +32,8 @@ class ShowsDataFetcher(private val showsService: SkuService) {
      */
     @DgsQuery
 //    @Secured("REGISTERED")
-//    @PreAuthorize("hasAnyRole('ROLE_GUEST')") //Will throw exception
-    @PreAuthorize("hasAnyRole('ROLE_REGISTERED')")
+//    @PreAuthorize("hasAnyRole('ROLE_GUEST',)") //Will throw exception
+    @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun skus(@InputArgument skuid : String?): List<com.galaxy.catalog.codegen.types.Sku> {
         return if(skuid != null) {
             showsService.skus().filter { it.name.contains(skuid) }
