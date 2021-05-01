@@ -2,12 +2,12 @@ package com.galaxy.foundation.jwt.config
 
 
 import com.galaxy.foundation.JwtUtils
-import com.galaxy.foundation.jwt.JwtUserDetailsService
+import com.galaxy.foundation.spring.ext.CustomUserDetails
+import com.galaxy.foundation.spring.ext.CustomUserDetailsService
 import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse
 class JwtRequestFilter : OncePerRequestFilter() {
 
     @Autowired
-    private val jwtUserDetailsService: JwtUserDetailsService? = null
+    private val jwtUserDetailsService: CustomUserDetailsService? = null
 
     @Autowired
     private val jwtTokenUtil: JwtUtils? = null
@@ -49,11 +49,12 @@ class JwtRequestFilter : OncePerRequestFilter() {
 
 // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().authentication == null) {
-            val userDetails: UserDetails = jwtUserDetailsService!!.loadUserByUsername(username)
+            val jwtUser = jwtTokenUtil?.getJwtUser(jwtToken);
+            val userDetails: CustomUserDetails? = jwtUser?.let { jwtUserDetailsService!!.loadDetails(it) };
 
 // if token is valid configure Spring Security to manually set
 // authentication
-            if (jwtTokenUtil?.validateToken(jwtToken, userDetails) == true) {
+            if (userDetails?.let { jwtTokenUtil?.validateToken(jwtToken, it) } == true) {
                 val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.authorities
                 )
