@@ -1,0 +1,31 @@
+type Query {
+    inventory(skuid: String!, location: String! ): [Inventory]
+}
+
+type Mutation {
+    addInventory(inventory: SubmittedInventory): [Inventory]
+}
+
+type Sku @key(fields: "skuid")  @extends {
+    skuId: Int @external
+    inventory: [Inventory]
+}
+
+type Inventory {
+    skuid: String!
+    location: String!
+    qtyOnline: Int
+    totalQty: Int
+}
+
+input SubmittedInventory {
+    skuid: String!
+    location: String!
+    totalQty: Int
+    online: Int
+    inStore: Int
+    backStore: Int
+    onlineWaterMark: Int
+    onlineReserved: Int
+    transit: Int
+}

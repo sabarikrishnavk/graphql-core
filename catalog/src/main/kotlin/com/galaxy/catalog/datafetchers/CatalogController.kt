@@ -25,7 +25,7 @@ import org.springframework.security.access.annotation.Secured
 import org.springframework.security.access.prepost.PreAuthorize
 
 @DgsComponent
-class ShowsDataFetcher(private val showsService: SkuService) {
+class CatalogController(private val showsService: SkuService) {
     /**
      * This datafetcher resolves the shows field on Query.
      * It uses an @InputArgument to get the titleFilter from the Query if one is defined.
