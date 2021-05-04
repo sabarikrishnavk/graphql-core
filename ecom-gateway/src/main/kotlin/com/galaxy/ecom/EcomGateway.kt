@@ -8,11 +8,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
-@SpringBootApplication(exclude = arrayOf(SecurityAutoConfiguration::class))
-@ComponentScan("com.galaxy.foundation","com.galaxy.inventory")
+@SpringBootApplication//(exclude = arrayOf(SecurityAutoConfiguration::class))
+@ComponentScan("com.galaxy.foundation","com.galaxy.ecom")
 @EnableConfigurationProperties(JwtProperties::class)
-class InventoryApplication
+class EcomGateway
 
 fun main(args: Array<String>) {
-	runApplication<InventoryApplication>(*args)
+	runApplication<EcomGateway>(*args)
 }

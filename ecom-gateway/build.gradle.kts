@@ -22,10 +22,9 @@ repositories {
 dependencies {
     implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
     api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
-    implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer")
+
     api(project(":foundation"))
 
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
@@ -33,7 +32,7 @@ dependencies {
 
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     generateClient = true
-    packageName = "com.galaxy.inventory.codegen"
+    packageName = "com.galaxy.ecom.codegen"
 }
 
 tasks.withType<KotlinCompile> {
@@ -50,8 +49,8 @@ tasks.withType<Test> {
 docker {
     springBootApplication {
         baseImage.set("openjdk:11-jdk-slim")
-        ports.set(listOf(8081))
-        images.set(setOf("galaxy-inventory:1.0", "galaxy-inventory:latest"))
+        ports.set(listOf(8082))
+        images.set(setOf("galaxy-ecom-gateway:1.0", "galaxy-ecom-gateway:latest"))
         jvmArgs.set(listOf("-Dspring.profiles.active=production", "-Xmx2048m"))
     }
 }

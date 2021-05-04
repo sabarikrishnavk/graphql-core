@@ -12,7 +12,7 @@ type Subscription {
 }
 
 type Sku {
-    skuid: String!
+    id: String!
     name: String!
     price: Int
     shortdescription: String

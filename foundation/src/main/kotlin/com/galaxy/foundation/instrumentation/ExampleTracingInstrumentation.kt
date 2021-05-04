@@ -35,9 +35,8 @@ class ExampleTracingInstrumentation: SimpleInstrumentation() {
     }
 
     override fun instrumentDataFetcher(dataFetcher: DataFetcher<*>, parameters: InstrumentationFieldFetchParameters): DataFetcher<*> {
-
         // We only care about user code
-        if(parameters.isTrivialDataFetcher || parameters.executionStepInfo.path.toString().startsWith("/__schema")) {
+        if(parameters.isTrivialDataFetcher) {
             return dataFetcher
         }
 

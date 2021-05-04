@@ -1,21 +1,16 @@
 
 package com.galaxy.catalog.services
 
-import com.galaxy.catalog.codegen.types.Sku
 import org.springframework.stereotype.Service
-import java.util.*
-
-interface SkuService {
-    fun skus(): List<com.galaxy.catalog.codegen.types.Sku>
-}
+import com.galaxy.catalog.codegen.types.Sku
 
 @Service
-class BasicSkuService : SkuService {
-    override fun skus(): List<com.galaxy.catalog.codegen.types.Sku> {
+class SkuService {
+     fun skus(): List<Sku> {
         return listOf(
-            Sku(id = "SKU1", name = "Stranger Things", price = 123),
-            Sku(id = "SKU2", name = " Things", price = 456),
-            Sku(id = "SKU3", name = "Stranger ", price = 789)
+            Sku(skuid = "SKU1", name = "Stranger Things", price = 123),
+            Sku(skuid = "SKU2", name = " Things", price = 456),
+            Sku(skuid = "SKU3", name = "Stranger ", price = 789)
         )
     }
 }
