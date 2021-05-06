@@ -52,7 +52,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 // We don't need CSRF for this example
         httpSecurity.csrf().disable() // dont authenticate this particular request
             .authorizeRequests().antMatchers("/graphql")
-            //.permitAll().anyRequest ()
+            .permitAll().anyRequest ()
             .authenticated()
             .and()
             .exceptionHandling()

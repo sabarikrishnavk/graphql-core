@@ -68,6 +68,7 @@ class CatalogControllerTest {
                 skus (skuid:"SKU1") {
                     name
                     price
+                    skuid
                 }
             }
         """.trimIndent()

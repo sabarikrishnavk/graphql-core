@@ -7,7 +7,7 @@ type Mutation {
 }
 
 type Sku @key(fields: "skuid")  @extends {
-    skuId: Int @external
+    skuid: String! @external
     inventory: [Inventory]
 }
 

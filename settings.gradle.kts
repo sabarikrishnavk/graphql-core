@@ -8,5 +8,5 @@
  */
 
 rootProject.name = "core"
-include ("foundation","auth","catalog","inventory","ecom-gateway")
+include ("foundation","auth","catalog","inventory")
 //include 'application'

@@ -31,6 +31,7 @@ dependencies {
 }
 
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
+//    schemaPaths= mutableListOf<Any>("${rootDir}/schema/catalog")
     generateClient = true
     packageName = "com.galaxy.catalog.codegen"
 }

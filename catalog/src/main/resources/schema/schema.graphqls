@@ -2,38 +2,37 @@ type Query {
     skus(skuid: String): [Sku]
 }
 
-type Mutation {
-    addReview(review: SubmittedReview): [Review]
-#    addArtwork(showId: Int!, upload: Upload!): [Image]! @skipcodegen
-}
+#type Mutation {
+#    addReview(review: SubmittedReview): [Review]
+##    addArtwork(showId: Int!, upload: Upload!): [Image]! @skipcodegen
+#}
 
-type Subscription {
-    reviewAdded(skuId: Int!): Review
-}
+#type Subscription {
+#    reviewAdded(skuId: Int!): Review
+#}
 
-type Sku {
+type Sku @key(fields: "skuid"){
     skuid: String!
     name: String!
     price: Int
     shortdescription: String
     longdescription: String
-    reviews: [Review]
     images: [Image]
 }
 
-
-type Review {
-    userId: String
-    starScore: Int
-    submittedDate: DateTime
-}
-
-input SubmittedReview {
-    showId: Int!
-    userId: String!
-    starScore: Int!
-}
-
+#
+#type Review {
+#    userId: String
+#    starScore: Int
+#    submittedDate: DateTime
+#}
+#
+#input SubmittedReview {
+#    showId: Int!
+#    userId: String!
+#    starScore: Int!
+#}
+#
 type Image {
     imageType: String
     url: String
