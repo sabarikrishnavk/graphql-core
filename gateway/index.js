@@ -1,16 +1,32 @@
 const { ApolloServer } = require("apollo-server");
-const { ApolloGateway } = require("@apollo/gateway");
+const { ApolloGateway , RemoteGraphQLDataSource } = require("@apollo/gateway");
 
-const server = new ApolloServer({
-  gateway: new ApolloGateway({
+class AuthenticatedDataSource extends RemoteGraphQLDataSource {
+  willSendRequest({ request, context }) {
+    // Pass the JWT token from the context to underlying services
+    request.http.headers.set(   'Authorization', context.token);
+  }
+}
+const gateway = new ApolloGateway({
     debug: true,
     serviceList: [
       { name: "auth", url: "http://localhost:8081/graphql" },
       { name: "catalog", url: "http://localhost:8082/graphql" },
       { name: "inventory", url: "http://localhost:8083/graphql" }
-    ]
-  }),
-  subscriptions: false
+    ],
+    buildService({ name, url }) {
+       return new AuthenticatedDataSource({ url });
+    }
+});
+const server = new ApolloServer( {
+    gateway,
+
+    subscriptions: false,
+
+    context: ({ req }) => {
+      const token = req.headers.authorization || '';
+      return {  token };
+    }
 });
 
 server.listen().then(({ url }) => {
