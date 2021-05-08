@@ -4,6 +4,7 @@ import com.galaxy.inventory.codegen.types.Inventory
 import com.galaxy.inventory.codegen.types.Sku
 import com.galaxy.inventory.services.InventoryService
 import com.netflix.graphql.dgs.*
+import graphql.schema.DataFetchingEnvironment
 import org.springframework.security.access.prepost.PreAuthorize
 
 @DgsComponent
@@ -17,8 +18,6 @@ class InventoryController(private val inventoryService: InventoryService) {
         return values.get("skuid")?.let { Sku(it) }
     }
     @DgsQuery
-//    @Secured("REGISTERED")
-//    @PreAuthorize("hasAnyRole('ROLE_GUEST',)") //Will throw exception
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun inventorySkuLocation(@InputArgument skuid : String?,@InputArgument location : String?): List<Inventory> {
         return if(skuid != null) {
@@ -28,10 +27,18 @@ class InventoryController(private val inventoryService: InventoryService) {
         }
     }
     @DgsData(parentType = "Sku" , field="inventory")
-//    @Secured("REGISTERED")
-//    @PreAuthorize("hasAnyRole('ROLE_GUEST',)") //Will throw exception
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
-    fun inventory(@InputArgument skuid : String? ): List<Inventory> {
+    fun inventory(dfe: DataFetchingEnvironment): List<Inventory> {
+        val sku = dfe.getSource<Sku>();
+        return if(sku.skuid != null) {
+            inventoryService.inventory().filter { it.skuid.contains(sku.skuid) }
+        } else {
+            inventoryService.inventory()
+        }
+    }
+    @DgsQuery
+    @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
+    fun inventoryBySku(@InputArgument skuid : String? ): List<Inventory> {
         return if(skuid != null) {
             inventoryService.inventory().filter { it.skuid.contains(skuid) }
         } else {
