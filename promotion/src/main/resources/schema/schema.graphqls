@@ -1,0 +1,17 @@
+type Query {
+    discountSkuLocation(skuid: String!, location: String! ): [DiscountPrice]
+    discountBySku(skuid: String!  ): [DiscountPrice]
+}
+
+type Price @key(fields: "skuid")  @extends {
+    skuid: String! @external
+    discounts: [DiscountPrice]
+}
+
+type DiscountPrice {
+    skuid: String!
+    location: String!
+    price: Int
+    discount: Int
+
+}

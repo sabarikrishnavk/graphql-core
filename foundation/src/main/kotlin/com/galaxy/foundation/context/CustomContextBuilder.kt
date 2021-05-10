@@ -14,4 +14,5 @@ class CustomContextBuilder : DgsCustomContextBuilder<CustomContext?> {
 class CustomContext {
     val userId = "UserId"
     val storeId= "EcomStoreId"
+    val channel= "desktop"
 }

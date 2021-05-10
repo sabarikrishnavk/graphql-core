@@ -1,0 +1,32 @@
+type Query {
+    priceSkuLocation(skuid: String!, location: String! ): [Price]
+    priceBySku(skuid: String!  ): [Price]
+}
+type Mutation {
+    addPrice(inventory: SubmittedPrice): [Price]
+}
+
+type Sku @key(fields: "skuid")  @extends {
+    skuid: String! @external
+    price: [Price]
+}
+
+type Price {
+    priceId: String!
+    skuid: String!
+    location: String!
+    version: Int
+    price: Int
+    wasprice: Int
+    listprice: Int
+}
+
+input SubmittedPrice {
+    priceId: String!
+    skuid: String!
+    location: String!
+    version: Int
+    price: Int
+    wasprice: Int
+    listprice: Int
+}

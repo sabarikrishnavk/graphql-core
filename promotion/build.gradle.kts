@@ -33,7 +33,7 @@ dependencies {
 
 tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
     generateClient = true
-    packageName = "com.galaxy.inventory.codegen"
+    packageName = "com.galaxy.price.codegen"
 }
 
 tasks.withType<KotlinCompile> {
@@ -50,8 +50,8 @@ tasks.withType<Test> {
 docker {
     springBootApplication {
         baseImage.set("openjdk:11-jdk-slim")
-        ports.set(listOf(8083))
-        images.set(setOf("galaxy-inventory:1.0", "galaxy-inventory:latest"))
+        ports.set(listOf(8084))
+        images.set(setOf("galaxy-price:1.0", "galaxy-price:latest"))
         jvmArgs.set(listOf("-Dspring.profiles.active=production", "-Xmx2048m"))
     }
 }

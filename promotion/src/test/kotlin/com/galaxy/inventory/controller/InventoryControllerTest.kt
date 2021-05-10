@@ -44,19 +44,19 @@ class InventoryControllerTest {
 
     @Test
     fun inventory() {
-        val quantity: List<Integer> = dgsQueryExecutor.executeAndExtractJsonPath(
+        val quantity: List<String> = dgsQueryExecutor.executeAndExtractJsonPath(
             """
             {
-              inventorySkuLocation(skuid:"SKU",location:"WH1"){
+              inventory(skuid:"SKU",location:"WH1"){
                skuid
                location
                totalQty
               }
             }
-        """.trimIndent(), "data.inventorySkuLocation[*].totalQty"
+        """.trimIndent(), "data.inventory[*].totalQty"
         )
 
-        assertThat(quantity[0]).isEqualTo(25)
+        assertThat(quantity).contains("25")
     }
 
     @Test
@@ -66,7 +66,7 @@ class InventoryControllerTest {
         val result = dgsQueryExecutor.execute(
             """
             {
-              inventorySkuLocation(skuid:"SKU",location:"WH1"){
+              inventory(skuid:"SKU",location:"WH1"){
                skuid
                location
                totalQty
@@ -83,15 +83,15 @@ class InventoryControllerTest {
     fun inventoryWithQueryApi() {
         val graphQLQueryRequest =
             GraphQLQueryRequest(
-                com.galaxy.inventory.codegen.client.InventorySkuLocationGraphQLQuery.Builder()
+                com.galaxy.inventory.codegen.client.InventoryGraphQLQuery.Builder()
                     .skuid("SKU1")
                     .location("WH1")
                     .build(),
-                com.galaxy.inventory.codegen.client.InventorySkuLocationProjectionRoot().totalQty().location().skuid()
+                com.galaxy.inventory.codegen.client.InventoryProjectionRoot().totalQty().location().skuid()
             )
         val quantity = dgsQueryExecutor.executeAndExtractJsonPath<List<Integer>>(
             graphQLQueryRequest.serialize(),
-            "data.inventorySkuLocation[*].totalQty"
+            "data.inventory[*].totalQty"
         )
         assertThat(quantity[0]).isEqualTo(25)
     }
