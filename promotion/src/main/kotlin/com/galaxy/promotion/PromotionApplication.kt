@@ -1,5 +1,5 @@
 
-package com.galaxy.catalog
+package com.galaxy.promotion
 
 import com.galaxy.foundation.jwt.JwtProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -9,7 +9,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication(exclude = arrayOf(SecurityAutoConfiguration::class))
-@ComponentScan("com.galaxy.foundation","com.galaxy.price")
+@ComponentScan("com.galaxy.foundation","com.galaxy.promotion")
 @EnableConfigurationProperties(JwtProperties::class)
 class InventoryApplication
 

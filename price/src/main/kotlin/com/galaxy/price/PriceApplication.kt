@@ -1,5 +1,5 @@
 
-package com.galaxy.catalog
+package com.galaxy.price
 
 import com.galaxy.foundation.jwt.JwtProperties
 import org.springframework.boot.autoconfigure.SpringBootApplication
