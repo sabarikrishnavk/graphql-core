@@ -2,9 +2,12 @@ package com.galaxy.foundation.jwt.config
 
 
 import com.galaxy.foundation.JwtUtils
+import com.galaxy.foundation.instrumentation.GraphqlTracingInstrumentation
 import com.galaxy.foundation.spring.ext.CustomUserDetails
 import com.galaxy.foundation.spring.ext.CustomUserDetailsService
 import io.jsonwebtoken.ExpiredJwtException
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class JwtRequestFilter : OncePerRequestFilter() {
 
+    val LOGGER: Logger = LogManager.getLogger(GraphqlTracingInstrumentation::class.java.getName())
     @Autowired
     private val jwtUserDetailsService: CustomUserDetailsService? = null
 
@@ -39,12 +43,12 @@ class JwtRequestFilter : OncePerRequestFilter() {
             try {
                 username = jwtTokenUtil?.getUserNameFromJwtToken(jwtToken)
             } catch (e: IllegalArgumentException) {
-                println("Unable to get JWT Token")
+                LOGGER.error("Unable to get JWT Token")
             } catch (e: ExpiredJwtException) {
-                println("JWT Token has expired")
+                LOGGER.error("JWT Token has expired")
             }
         } else {
-            logger.warn("JWT Token does not begin with Bearer String")
+            LOGGER.debug("JWT Token does not begin with Bearer String")
         }
 
 // Once we get the token validate it.

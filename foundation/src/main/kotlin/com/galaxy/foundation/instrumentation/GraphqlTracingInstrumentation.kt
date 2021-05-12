@@ -10,8 +10,8 @@ import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchPar
 import graphql.schema.DataFetcher
 import graphql.schema.GraphQLNonNull
 import graphql.schema.GraphQLObjectType
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 
@@ -19,9 +19,9 @@ import java.util.concurrent.CompletableFuture
  * Example Instrumentation class that prints the time each datafetcher takes.
  */
 @Component
-class ExampleTracingInstrumentation: SimpleInstrumentation() {
+class GraphqlTracingInstrumentation: SimpleInstrumentation() {
 
-    val logger : Logger = LoggerFactory.getLogger(ExampleTracingInstrumentation::class.java)
+    val LOGGER: Logger = LogManager.getLogger(GraphqlTracingInstrumentation::class.java.getName())
 
     override fun createState(): InstrumentationState {
         return TraceState()
@@ -48,11 +48,11 @@ class ExampleTracingInstrumentation: SimpleInstrumentation() {
             if(result is CompletableFuture<*>) {
                 result.whenComplete { _,_ ->
                     val totalTime = System.currentTimeMillis() - startTime
-                    logger.info("Async datafetcher '$dataFetcherName' took ${totalTime}ms")
+                    LOGGER.info("Async datafetcher '$dataFetcherName' took ${totalTime}ms")
                 }
             } else {
                 val totalTime = System.currentTimeMillis() - startTime
-                logger.info("Datafetcher '$dataFetcherName': ${totalTime}ms")
+                LOGGER.info("Datafetcher '$dataFetcherName': ${totalTime}ms")
             }
 
             result
@@ -62,7 +62,7 @@ class ExampleTracingInstrumentation: SimpleInstrumentation() {
     override fun instrumentExecutionResult(executionResult: ExecutionResult, parameters: InstrumentationExecutionParameters): CompletableFuture<ExecutionResult> {
         val state: TraceState = parameters.getInstrumentationState()
         val totalTime = System.currentTimeMillis() - state.traceStartTime
-        logger.info("Total execution time: ${totalTime}ms")
+        LOGGER.info("Total execution time: ${totalTime}ms")
 
         return super.instrumentExecutionResult(executionResult, parameters)
     }
