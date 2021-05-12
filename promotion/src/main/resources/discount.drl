@@ -1,0 +1,16 @@
+
+import com.galaxy.promotion.engine.PECart
+
+rule "Discount for CARD payment above 10000"
+    when
+        orderObject : PECart( paymenttype=="CARD" && totalprice > 10000 );
+    then
+        orderObject.setDiscount(15);
+end;
+
+rule "Discount for CARD payment below 10000"
+    when
+        orderObject : PECart( paymenttype=="CARD" && totalprice > 5000 && totalprice < 10000 );
+    then
+        orderObject.setDiscount(5);
+end;

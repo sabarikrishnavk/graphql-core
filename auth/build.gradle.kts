@@ -19,11 +19,14 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    all {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+//        exclude(group="org.springframework.boot",module="spring-boot-starter-security")
+    }
+}
 dependencies {
     api(project(":foundation"))
-
-    //implementation("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure")
-    implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 }

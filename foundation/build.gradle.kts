@@ -24,24 +24,30 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 repositories {
     mavenCentral()
 }
-//
 dependencies {
-    api ("org.springframework.boot:spring-boot-starter")
 
     api(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
     api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
+    api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer")
 
     api("com.graphql-java:graphql-java-extended-scalars:1.0")
     api("com.github.javafaker:javafaker:1.+")
 
+    //For security
     api("org.springframework.boot:spring-boot-starter-security")
     api("io.jsonwebtoken:jjwt-api:0.11.2")
     api("io.jsonwebtoken:jjwt-impl:0.11.2")
     api("io.jsonwebtoken:jjwt-jackson:0.11.2")
 
-    api("com.fasterxml.jackson.module:jackson-module-kotlin")
+    //For logging to json format
+    api("org.apache.logging.log4j:log4j-api")
+    api("org.apache.logging.log4j:log4j-core")
+    api("com.fasterxml.jackson.core:jackson-core")
+    api("com.fasterxml.jackson.core:jackson-databind")
+    api("com.fasterxml.jackson.core:jackson-annotations")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    api("org.springframework.boot:spring-boot-starter-web")
+    api("org.springframework.boot:spring-boot-starter-actuator")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 tasks.bootJar{

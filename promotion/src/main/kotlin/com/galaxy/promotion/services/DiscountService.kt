@@ -7,7 +7,7 @@ import com.galaxy.promotion.codegen.types.Discounts
 import org.springframework.stereotype.Service
 
 @Service
-class PromotionService {
+class DiscountService {
     fun discounts(): List<Discounts> {
         return listOf(
             Discounts(priceid = "SKU1WH1V1" , skuid = "SKU1", location = "WH1", price = 25 , discountdtl = listOf(DiscountDetail(type=DiscountType.AMOUNT_OFF,amountoff = 5))),

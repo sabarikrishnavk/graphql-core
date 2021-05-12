@@ -5,21 +5,17 @@ import com.galaxy.foundation.scalars.DateTimeScalarRegistration
 import com.galaxy.promotion.codegen.types.DiscountDetail
 import com.galaxy.promotion.codegen.types.DiscountType
 import com.galaxy.promotion.codegen.types.Discounts
-import com.galaxy.promotion.services.PromotionService
-import com.jayway.jsonpath.TypeRef
+import com.galaxy.promotion.services.DiscountService
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
 import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest
-import graphql.ExecutionResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import java.time.OffsetDateTime
 
 @SpringBootTest(classes = [PromotionController::class, DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
 class PromotionControllerTest {
@@ -28,12 +24,12 @@ class PromotionControllerTest {
     lateinit var dgsQueryExecutor: DgsQueryExecutor
 
     @MockBean
-    lateinit var promotionService: PromotionService
+    lateinit var discountService: DiscountService
 
 
     @BeforeEach
     fun before() {
-        `when`(promotionService.discounts()).thenAnswer {
+        `when`(discountService.discounts()).thenAnswer {
 
              listOf(
                 Discounts(priceid = "SKU1WH1V1" , skuid = "SKU1", location = "WH1", price = 25 , discountdtl = listOf(
@@ -88,7 +84,7 @@ class PromotionControllerTest {
 
     @Test
     fun showsWithException() {
-        `when`(promotionService.discounts()).thenThrow(RuntimeException("nothing to see here"))
+        `when`(discountService.discounts()).thenThrow(RuntimeException("nothing to see here"))
 
         val result = dgsQueryExecutor.execute(
             """

@@ -2,12 +2,26 @@ type Query {
     discountSkuLocation(skuid: String!, location: String! ): [Discounts]
     discountBySku(skuid: String!  ): [Discounts]
 }
-
+type Mutation {
+    evaluatePromotion(cart: Cart!): ReturnCart
+}
 type Price @key(fields: "priceid" )  @extends {
     priceid: String! @external
     discounts: [Discounts]
 }
+input Cart{
+    cartid : String!
+    paymenttype:String
+    totalprice :Int
+    discount :Int
+}
 
+type ReturnCart{
+    cartid : String!
+    paymenttype:String
+    totalprice :Int
+    discount :Int
+}
 type Discounts {
     priceid: String!
     skuid: String!

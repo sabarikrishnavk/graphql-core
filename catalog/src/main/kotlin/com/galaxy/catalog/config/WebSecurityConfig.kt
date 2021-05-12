@@ -51,9 +51,10 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(httpSecurity: HttpSecurity) {
 // We don't need CSRF for this example
         httpSecurity.csrf().disable() // dont authenticate this particular request
-            .authorizeRequests().antMatchers("/graphql")
-            .permitAll().anyRequest ()
-            .authenticated()
+            .authorizeRequests()
+            .antMatchers("/graphiql").permitAll()
+            .antMatchers("/actuator").permitAll()
+            .anyRequest ().authenticated()
             .and()
             .exceptionHandling()
             .authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

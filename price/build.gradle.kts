@@ -18,15 +18,13 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 repositories {
     mavenCentral()
 }
-
+configurations {
+    all {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+    }
+}
 dependencies {
-    implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
-    api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
-    implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer")
     api(project(":foundation"))
-
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 }
