@@ -1,14 +1,16 @@
 package com.galaxy.price.controller
 
+import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.price.codegen.types.Price
 import com.galaxy.price.codegen.types.Sku
 import com.galaxy.price.services.PriceService
 import com.netflix.graphql.dgs.*
 import graphql.schema.DataFetchingEnvironment
+import org.apache.logging.log4j.Level
 import org.springframework.security.access.prepost.PreAuthorize
 
 @DgsComponent
-class PriceController(private val priceService: PriceService ) {
+class PriceController(private val priceService: PriceService , val eventLogger: EventLogger ) {
     /**
      * This datafetcher resolves the shows field on Query.
      * It uses an @InputArgument to get the titleFilter from the Query if one is defined.
@@ -30,6 +32,8 @@ class PriceController(private val priceService: PriceService ) {
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun priceSkuLocation(@InputArgument skuid : String?,@InputArgument location : String?): List<Price> {
+
+        eventLogger.log(Level.INFO,"priceSkuLocation", skuid,location)
         return if(skuid != null) {
             priceService.price().filter { it.skuid.contains(skuid) }
         } else {

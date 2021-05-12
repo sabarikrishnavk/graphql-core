@@ -45,6 +45,8 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-core")
     api("com.fasterxml.jackson.core:jackson-databind")
     api("com.fasterxml.jackson.core:jackson-annotations")
+    api("org.projectlombok:lombok:1.18.20")
+    api("com.google.code.gson:gson:2.8.6")
 
     api("org.springframework.boot:spring-boot-starter-web")
     api("org.springframework.boot:spring-boot-starter-actuator")
@@ -59,7 +61,6 @@ tasks.jar{
 tasks.generateJava{
     enabled = false
 }
-
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {

@@ -16,8 +16,5 @@ import org.springframework.context.annotation.ComponentScan
 class PriceApplication
 
 fun main(args: Array<String>) {
-	val LOGGER: Logger = LogManager.getLogger(PriceApplication::class.java.getName())
-
-//	LOGGER.info("test message")
 	runApplication<PriceApplication>(*args)
 }
