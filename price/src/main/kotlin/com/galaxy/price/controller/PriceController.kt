@@ -4,6 +4,7 @@ import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.price.codegen.types.Price
 import com.galaxy.price.codegen.types.Sku
 import com.galaxy.price.services.PriceService
+import com.galaxy.price.util.PriceEventType
 import com.netflix.graphql.dgs.*
 import graphql.schema.DataFetchingEnvironment
 import org.apache.logging.log4j.Level
@@ -33,7 +34,7 @@ class PriceController(private val priceService: PriceService , val eventLogger: 
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun priceSkuLocation(@InputArgument skuid : String?,@InputArgument location : String?): List<Price> {
 
-        eventLogger.log(Level.INFO,"priceSkuLocation", skuid,location)
+        eventLogger.log(Level.INFO,"priceSkuLocation",PriceEventType.PRICE_SAVE, skuid,location)
         return if(skuid != null) {
             priceService.price().filter { it.skuid.contains(skuid) }
         } else {
@@ -43,6 +44,7 @@ class PriceController(private val priceService: PriceService , val eventLogger: 
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun priceBySku(@InputArgument skuid : String? ): List<Price> {
+        eventLogger.log(Level.INFO,"priceBySku",PriceEventType.PRICE_SAVE, skuid)
         return if(skuid != null) {
             priceService.price().filter { it.skuid.contains(skuid) }
         } else {

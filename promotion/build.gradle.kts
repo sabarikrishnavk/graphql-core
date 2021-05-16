@@ -28,6 +28,7 @@ dependencies {
     api(project(":foundation"))
 
     implementation("org.drools:drools-core:7.49.0.Final")
+    implementation("org.drools:drools-templates:7.49.0.Final")
     implementation("org.drools:drools-compiler:7.49.0.Final")
     implementation("org.drools:drools-mvel:7.49.0.Final")
 

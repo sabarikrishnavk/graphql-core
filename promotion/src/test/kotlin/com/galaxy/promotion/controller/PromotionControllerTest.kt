@@ -1,6 +1,7 @@
 
 package com.galaxy.promotion.controller
 
+import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.foundation.scalars.DateTimeScalarRegistration
 import com.galaxy.promotion.codegen.types.DiscountDetail
 import com.galaxy.promotion.codegen.types.DiscountType
@@ -17,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
-@SpringBootTest(classes = [PromotionController::class, DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
+@SpringBootTest(classes = [PromotionController::class,EventLogger::class,  DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
 class PromotionControllerTest {
 
     @Autowired
@@ -32,17 +33,18 @@ class PromotionControllerTest {
         `when`(discountService.discounts()).thenAnswer {
 
              listOf(
-                Discounts(priceid = "SKU1WH1V1" , skuid = "SKU1", location = "WH1", price = 25 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5)
+                Discounts(priceid = "SKU1WH1V1" , skuid = "SKU1", location = "WH1", price =
+                25.0 , discountdtl = listOf(
+                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
                 )),
-                Discounts(priceid = "SKU1WH2V1" , skuid = "SKU1", location = "WH2", price = 25 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.PERCENTAGE_OFF,percentage = 25)
+                Discounts(priceid = "SKU1WH2V1" , skuid = "SKU1", location = "WH2", price = 25.0 , discountdtl = listOf(
+                    DiscountDetail(type= DiscountType.PERCENTAGE_OFF,percentage = 25.0)
                 )),
-                Discounts(priceid = "SKU2WH1V1" , skuid = "SKU2", location = "WH1", price = 25 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5)
+                Discounts(priceid = "SKU2WH1V1" , skuid = "SKU2", location = "WH1", price = 25.0 , discountdtl = listOf(
+                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
                 )),
-                Discounts(priceid = "SKU2WH2V1" , skuid = "SKU2", location = "WH2", price = 25 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.FIXED_AMOUNT,amountoff = 20)
+                Discounts(priceid = "SKU2WH2V1" , skuid = "SKU2", location = "WH2", price = 25.0 , discountdtl = listOf(
+                    DiscountDetail(type= DiscountType.FIXED_AMOUNT,amountoff = 20.0)
                 )),
             )
         }
@@ -79,7 +81,7 @@ class PromotionControllerTest {
         """.trimIndent(), "data.discountSkuLocation[*].price"
         )
 
-        assertThat(price[0]).isEqualTo(25)
+        assertThat(price[0]).isEqualTo(25.0)
     }
 
     @Test
@@ -120,7 +122,7 @@ class PromotionControllerTest {
     }
 
     @Test
-    fun inventoryWithQueryApi() {
+    fun discountsWithQueryApi() {
         val graphQLQueryRequest =
             GraphQLQueryRequest(
                 com.galaxy.promotion.codegen.client.DiscountSkuLocationGraphQLQuery.Builder()
@@ -133,6 +135,6 @@ class PromotionControllerTest {
             graphQLQueryRequest.serialize(),
             "data.discountSkuLocation[*].discountdtl[*].amountoff"
         )
-        assertThat(amountoff[0]).isEqualTo(5)
+        assertThat(amountoff[0]).isEqualTo(5.0)
     }
 }

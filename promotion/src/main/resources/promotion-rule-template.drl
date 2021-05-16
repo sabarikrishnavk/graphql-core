@@ -1,0 +1,23 @@
+template header
+
+rule
+request
+response
+eventType
+discount
+
+package com.galaxy.promotion.engine
+
+global com.galaxy.promotion.engine.PEResult result;
+
+template "alert"
+
+rule "alert_@{row.rowNumber}"
+
+when
+    @{request}(@{rule})
+then
+    result.addPromotion("@{discount}");
+end
+
+end template

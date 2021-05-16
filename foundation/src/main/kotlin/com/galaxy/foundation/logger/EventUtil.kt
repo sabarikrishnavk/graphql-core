@@ -7,11 +7,7 @@ import java.util.regex.Pattern
 
 interface EventType
 
-enum class PromotionType: EventType{
-    PROMO_SAVE ,
-    PROMO_UPDATE
 
-}
 
 
 var BlaskListProperties = "(.*address.*|.*cardnumber.*|password|cvv|cvc|pin|pinnumber|.*name*.)"

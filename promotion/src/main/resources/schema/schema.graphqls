@@ -12,28 +12,28 @@ type Price @key(fields: "priceid" )  @extends {
 input Cart{
     cartid : String!
     paymenttype:String
-    totalprice :Int
-    discount :Int
+    totalprice :Float
+    discount :Float
 }
 
 type ReturnCart{
     cartid : String!
     paymenttype:String
-    totalprice :Int
-    discount :Int
+    totalprice :Float
+    discount :Float
 }
 type Discounts {
     priceid: String!
     skuid: String!
     location: String!
-    price: Int
+    price: Float
     discountdtl: [DiscountDetail]
 }
 type DiscountDetail{
     type: DiscountType
-    percentage : Int
-    fixed: Int
-    amountoff: Int
+    percentage : Float
+    fixed: Float
+    amountoff: Float
 }
 
 enum DiscountType {

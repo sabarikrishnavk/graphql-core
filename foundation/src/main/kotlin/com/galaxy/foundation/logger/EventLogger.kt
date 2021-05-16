@@ -15,17 +15,21 @@ class EventLogger {
 
     val gson: Gson = GsonBuilder().setExclusionStrategies(BlackListLogExclusion()  ).create()
 
-    fun log(level: Level, message:String?, vararg args: Any?){
+    fun log(level: Level, message:String?, eventType: EventType, vararg args: Any?){
         val logmap: MutableMap<String, Any> = HashMap()
 
         if(message !=null) logmap["message"] = message
+        if(message !=null) logmap["event"] = eventType.toString()
         println(args.size)
         for (obj in args){
             logmap["" + obj?.javaClass?.name] = gson.toJson(obj)
         }
         LOGGER.log(level,gson?.toJson(logmap)?.toString()?:"")
     }
+    fun log( eventType: EventType, message:String?, vararg args: Any?) {
+        log(Level.INFO,message,eventType,*args)
+    }
     fun logMessage(logEntry: LogEntry ){
-       log(logEntry.level, logEntry.message, *logEntry.params)
+       log(logEntry.level, logEntry.message,logEntry.eventType, *logEntry.params )
     }
 }

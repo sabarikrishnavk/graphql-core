@@ -11,12 +11,17 @@ class EventLoggerTest {
         val test1 =SampleObject("test","test","4121212112");
         val test2= "Stringtest"
 
-        eventLogger.log(Level.INFO,"test", test1,test2  );
+        eventLogger.log(Level.INFO,"test", TestType.TEST_SAVE, test1,test2  );
 
-        var logEntry= LogEntry(PromotionType.PROMO_SAVE, Level.INFO,"Success " , test1,test2 )
+        var logEntry= LogEntry(TestType.TEST_SAVE, Level.INFO,"Success " , test1,test2 )
 
         eventLogger.logMessage(logEntry);
     }
 
 }
 class SampleObject(val eventType: String,val level: String,val cardNumber:String)
+enum class TestType: EventType{
+    TEST_SAVE ,
+    TEST_UPDATE
+
+}
