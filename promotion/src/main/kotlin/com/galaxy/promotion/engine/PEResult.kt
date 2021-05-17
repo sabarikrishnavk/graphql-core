@@ -14,7 +14,6 @@ class PEResult{
     }
 
     fun addPromotion( promotion:String){
-        println("promotion:: ${promotion}")
         add(gson.fromJson<PEDiscount>(promotion,PEDiscount::class.java))
     }
 }
@@ -23,7 +22,7 @@ class PEDiscount(
     var promotiondescription: String ,
     var discount: Double ,
     var skuid: String? ,
-    var shipmodeid: String?
+    var shipmodemode: String?
 ){
     override fun toString(): String {
         return gson.toJson(this).replace("\"","'")

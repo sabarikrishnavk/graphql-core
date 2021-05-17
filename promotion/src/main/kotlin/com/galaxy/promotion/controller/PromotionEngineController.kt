@@ -20,7 +20,10 @@ class PromotionEngineController(private val promotionEngine: PromotionEngine , v
 
         val skuRequest = PESkuRequest("SKU1",2.0,"STH")
         skuRequest.price = cart.totalprice
-        skuRequest.customer = "Widgets Inc."
+        val attr = HashMap<String,String>();
+        attr.put("color","blue");
+        attr.put("size","M")
+        skuRequest.attr= attr
 
         val peResult: PEResult= promotionEngine.evaluate(skuRequest);
 

@@ -1,9 +1,9 @@
 package  com.galaxy.promotion.engine
 import java.sql.Timestamp
 
-data class PEPromotions(var promotionId: String, var description: String?,
+data class PEPromotions(var promotionid: String, var description: String?,
                         var status: PromotionStatus,
-                        var startDate: Timestamp?, var endDate: Timestamp? ) {
+                        var startdate: Timestamp?, var enddate: Timestamp? ) {
     public companion object
 }
 

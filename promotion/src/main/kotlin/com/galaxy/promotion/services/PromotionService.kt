@@ -27,9 +27,9 @@ class PromotionService( val eventLogger: EventLogger){
         highValueOrderCondition.operator = PECondition.Operator.GREATER_THAN
         highValueOrderCondition.value = 5000.0
         val widgetsIncCustomerCondition = PECondition()
-        widgetsIncCustomerCondition.field = "customer"
+        widgetsIncCustomerCondition.field = "skuid"
         widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
-        widgetsIncCustomerCondition.value = "Widgets Inc."
+        widgetsIncCustomerCondition.value = "SKU1"
 
         val action = PEAction(
             PEDiscount(
@@ -58,9 +58,9 @@ class PromotionService( val eventLogger: EventLogger){
         highValueOrderCondition2.value = 5000.0
 
         val widgetsIncCustomerCondition = PECondition()
-        widgetsIncCustomerCondition.field = "customer"
+        widgetsIncCustomerCondition.field = "skuid"
         widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
-        widgetsIncCustomerCondition.value = "Widgets Inc."
+        widgetsIncCustomerCondition.value = "SKU1"
 
         val action = PEAction(
             PEDiscount(

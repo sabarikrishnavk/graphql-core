@@ -20,7 +20,7 @@ class EventLogger {
 
         if(message !=null) logmap["message"] = message
         if(message !=null) logmap["event"] = eventType.toString()
-        println(args.size)
+
         for (obj in args){
             logmap["" + obj?.javaClass?.name] = gson.toJson(obj)
         }

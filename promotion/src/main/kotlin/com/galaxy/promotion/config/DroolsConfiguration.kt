@@ -23,8 +23,6 @@ class DroolsConfiguration(val promotionService: PromotionService, val eventLogge
     fun getKieContainer(): KieContainer? {
         val drl = applyRuleTemplate()
         eventLogger.log(PromotionEventType.PROMO_ENGINE_LOAD,"Loading DRL",drl)
-        print("${drl}");
-
 
         val kieServices = KieServices.Factory.get()
         val kieFileSystem = kieServices.newKieFileSystem()
@@ -68,7 +66,6 @@ class DroolsConfiguration(val promotionService: PromotionService, val eventLogge
 //        val kieServices = KieServices.Factory.get()
 //        val kieFileSystem = kieServices.newKieFileSystem()
 //        kieFileSystem.write("src/main/resources/rule.drl", drl)
-//        //println("drl:\n$drl")
 //        kieServices.newKieBuilder(kieFileSystem).buildAll()
 //        val kieContainer = kieServices.newKieContainer(kieServices.repository.defaultReleaseId)
 //        val statelessKieSession = kieContainer.kieBase.newStatelessKieSession()

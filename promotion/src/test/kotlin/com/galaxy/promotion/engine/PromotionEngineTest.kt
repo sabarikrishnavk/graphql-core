@@ -49,16 +49,22 @@ class PromotionEngineTest {
         highValueOrderCondition.operator = PECondition.Operator.GREATER_THAN
         highValueOrderCondition.value = 5000.0
         val widgetsIncCustomerCondition = PECondition()
-        widgetsIncCustomerCondition.field = "customer"
+        widgetsIncCustomerCondition.field = "skuid"
         widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
-        widgetsIncCustomerCondition.value = "Widgets Inc."
+        widgetsIncCustomerCondition.value = "SKU1"
+
+
+        val sizeCondition = PECondition()
+        sizeCondition.field = "attr.color"
+        sizeCondition.operator = PECondition.Operator.EQUAL_TO
+        sizeCondition.value = "blue"
 
         val action = PEAction(
             PEDiscount(promotionid = "PROMO1",promotiondescription = "First promo",
                 discount = 10.0 , "","")
         )
 
-        highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition, widgetsIncCustomerCondition)
+        highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition, widgetsIncCustomerCondition,sizeCondition)
         highValueOrderWidgetsIncRule.action= action
         highValueOrderWidgetsIncRule.requestClassName= PESkuRequest::class.java.name
 
@@ -68,22 +74,30 @@ class PromotionEngineTest {
             listOf(highValueOrderWidgetsIncRule)
         }
         droolsConfiguration = DroolsConfiguration(promotionService,eventLogger )
+        promotionEngine= PromotionEngine(droolsConfiguration.getKieContainer());
     }
 
     @Test
     fun evalulateSkuRequest() {
 
-        val drl = droolsConfiguration.applyRuleTemplate();
-        droolsConfiguration.getKieContainer()
 //        println("Rules drl: "+drl)
 
-        val skuRequest = PESkuRequest("SKU1",2.0,"STH")
-        skuRequest.price = 5001.0
-        skuRequest.customer = "Widgets Inc."
+        val skuRequest1 = PESkuRequest("SKU1",2.0,"STH")
+        val attr = HashMap<String,String>();
+        attr.put("color","blue");
+        attr.put("size","M")
+        skuRequest1.attr= attr
+        skuRequest1.price = 10500.0
 
-        val result = promotionEngine.evaluate(skuRequest);
+        val result1 = promotionEngine.evaluate(skuRequest1);
+        assertThat(result1.discounts[0].discount).isEqualTo(10.0)
 
-        println(result.discounts);
+
+        val skuRequest2 = PESkuRequest("SKU1",2.0,"STH")
+        skuRequest2.price = 1500.0
+
+        val result2 = promotionEngine.evaluate(skuRequest2);
+        assertThat(result2.discounts.size).isEqualTo(0);
 
     }
 
