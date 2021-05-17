@@ -9,8 +9,18 @@ import java.util.*
 @Service
 class PromotionService( val eventLogger: EventLogger){
 
-    fun getCurrentPRRules():List<PERule>{
+    fun activeSKURules():List<PERule>{
 
+        val highValueOrderWidgetsIncRule1 = rule1()
+        val highValueOrderWidgetsIncRule2 = rule2()
+
+
+
+        eventLogger.log(PromotionEventType.PROMO_ENGINE_DATACOLLECTION,"getCurrentPRRules",highValueOrderWidgetsIncRule1,highValueOrderWidgetsIncRule2 )
+        return listOf(highValueOrderWidgetsIncRule1,highValueOrderWidgetsIncRule2)
+    }
+
+    private fun rule1(): PERule {
         val highValueOrderWidgetsIncRule = PERule()
         val highValueOrderCondition = PECondition()
         highValueOrderCondition.field = "price"
@@ -22,16 +32,46 @@ class PromotionService( val eventLogger: EventLogger){
         widgetsIncCustomerCondition.value = "Widgets Inc."
 
         val action = PEAction(
-            PEDiscount(promotionid = "PROMO1",promotiondescription = "First promo",
-                discount = 10.0 , "","")
+            PEDiscount(
+                promotionid = "PROMO1", promotiondescription = "First promo",
+                discount = 10.0, "", ""
+            )
         )
 
         highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition, widgetsIncCustomerCondition)
-        highValueOrderWidgetsIncRule.action= action
-        highValueOrderWidgetsIncRule.requestClassName= PESkuRequest::class.java.name
+        highValueOrderWidgetsIncRule.action = action
+        highValueOrderWidgetsIncRule.requestClassName = PESkuRequest::class.java.name
+        return highValueOrderWidgetsIncRule
+    }
+    private fun rule2(): PERule {
+        val highValueOrderWidgetsIncRule = PERule()
+
+        val highValueOrderCondition1 = PECondition()
+        highValueOrderCondition1.field = "price"
+        highValueOrderCondition1.operator = PECondition.Operator.GREATER_THAN
+        highValueOrderCondition1.value = 1000.0
 
 
-        eventLogger.log(PromotionEventType.PROMO_ENGINE_DATACOLLECTION,"getCurrentPRRules",highValueOrderWidgetsIncRule )
-        return listOf(highValueOrderWidgetsIncRule)
+        val highValueOrderCondition2 = PECondition()
+        highValueOrderCondition2.field = "price"
+        highValueOrderCondition2.operator = PECondition.Operator.LESS_THAN
+        highValueOrderCondition2.value = 5000.0
+
+        val widgetsIncCustomerCondition = PECondition()
+        widgetsIncCustomerCondition.field = "customer"
+        widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
+        widgetsIncCustomerCondition.value = "Widgets Inc."
+
+        val action = PEAction(
+            PEDiscount(
+                promotionid = "PROMO2", promotiondescription = "Second promo",
+                discount = 5.0, "", ""
+            )
+        )
+
+        highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition1,highValueOrderCondition2, widgetsIncCustomerCondition)
+        highValueOrderWidgetsIncRule.action = action
+        highValueOrderWidgetsIncRule.requestClassName = PESkuRequest::class.java.name
+        return highValueOrderWidgetsIncRule
     }
 }

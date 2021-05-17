@@ -19,7 +19,7 @@ class PromotionEngineController(private val promotionEngine: PromotionEngine , v
         //val peOrder = PEOrder(cart.cartid,cart.totalprice,cart.discount)
 
         val skuRequest = PESkuRequest("SKU1",2.0,"STH")
-        skuRequest.price = 5001.0
+        skuRequest.price = cart.totalprice
         skuRequest.customer = "Widgets Inc."
 
         val peResult: PEResult= promotionEngine.evaluate(skuRequest);

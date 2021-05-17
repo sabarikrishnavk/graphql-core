@@ -15,6 +15,7 @@ import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.kie.api.runtime.KieContainer
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -30,6 +31,10 @@ class PromotionEngineTest {
 
     @Autowired
     lateinit var  droolsConfiguration: DroolsConfiguration
+
+    @Autowired
+    lateinit var  eventLogger: EventLogger
+
 
     @Autowired
     lateinit var  promotionEngine: PromotionEngine
@@ -58,17 +63,19 @@ class PromotionEngineTest {
         highValueOrderWidgetsIncRule.requestClassName= PESkuRequest::class.java.name
 
 
-        `when`(promotionService.getCurrentPRRules()).thenAnswer {
+        `when`(promotionService.activeSKURules()).thenAnswer {
 
-             listOf(highValueOrderWidgetsIncRule)
+            listOf(highValueOrderWidgetsIncRule)
         }
+        droolsConfiguration = DroolsConfiguration(promotionService,eventLogger )
     }
 
     @Test
     fun evalulateSkuRequest() {
 
-        val drl = droolsConfiguration.applyRuleTemplate(promotionService.getCurrentPRRules());
-        println("Rules drl: "+drl)
+        val drl = droolsConfiguration.applyRuleTemplate();
+        droolsConfiguration.getKieContainer()
+//        println("Rules drl: "+drl)
 
         val skuRequest = PESkuRequest("SKU1",2.0,"STH")
         skuRequest.price = 5001.0
@@ -80,11 +87,4 @@ class PromotionEngineTest {
 
     }
 
-    @Test
-    fun showsWithException() {
-    }
-
-    @Test
-    fun inventoryWithQueryApi() {
-    }
 }

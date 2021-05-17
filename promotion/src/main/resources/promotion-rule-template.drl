@@ -10,9 +10,9 @@ package com.galaxy.promotion.engine
 
 global com.galaxy.promotion.engine.PEResult result;
 
-template "alert"
+template "promotion_rule"
 
-rule "alert_@{row.rowNumber}"
+rule "promotion_rule_@{row.rowNumber}"
 
 when
     @{request}(@{rule})

@@ -18,37 +18,35 @@ import java.util.*
 
 @Configuration
 class DroolsConfiguration(val promotionService: PromotionService, val eventLogger: EventLogger) {
-    private val kieServices = KieServices.Factory.get()
-
 
     @Bean
     fun getKieContainer(): KieContainer? {
-        val kieFileSystem = kieServices.newKieFileSystem()
-
-        val prRulesList = promotionService.getCurrentPRRules();
-
-        val drl = applyRuleTemplate(prRulesList)
-
+        val drl = applyRuleTemplate()
         eventLogger.log(PromotionEventType.PROMO_ENGINE_LOAD,"Loading DRL",drl)
         print("${drl}");
 
-//        kieFileSystem.write(ResourceFactory.newClassPathResource("discount.drl"))
-        val kb = kieServices.newKieBuilder(kieFileSystem)
-        kb.buildAll()
-        val kieModule = kb.kieModule
 
+        val kieServices = KieServices.Factory.get()
+        val kieFileSystem = kieServices.newKieFileSystem()
+        kieFileSystem.write("src/main/resources/rule.drl", drl)
+        kieServices.newKieBuilder(kieFileSystem).buildAll()
+        val kieContainer = kieServices.newKieContainer(kieServices.repository.defaultReleaseId)
 
-        eventLogger.log(PromotionEventType.PROMO_ENGINE_LOAD,"Load completed ","kieModule created")
-        return kieServices.newKieContainer(kieModule.releaseId)
+        eventLogger.log(PromotionEventType.PROMO_ENGINE_LOAD,"Load completed ","kieContainer created")
+        return kieContainer
     }
 
 
 
     @Throws(Exception::class)
-    fun applyRuleTemplate( prRules : List<PERule>): String {
+    fun applyRuleTemplate(): String {
+        val activeSkuRules = promotionService.activeSKURules();
+
+
+        eventLogger.log(PromotionEventType.PROMO_ENGINE_LOAD,"Get Rules in applyRuleTemplate ",activeSkuRules)
 
         var rules = mutableListOf<Map<String, Any>?>();
-        prRules.forEach{rule->
+        activeSkuRules.forEach{rule->
 
             val ruleMap: MutableMap<String, Any> = HashMap()
             ruleMap["rule"] = rule

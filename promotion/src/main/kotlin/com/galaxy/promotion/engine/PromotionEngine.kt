@@ -10,11 +10,12 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
 
     @Throws(Exception::class)
     fun evaluate(request: PERequest ): PEResult {
-
-        val statelessKieSession = kieContainer!!.kieBase.newStatelessKieSession()
         val result = PEResult()
-        statelessKieSession.globals["result"] = result
-        statelessKieSession.execute(request)
+        val kieSession = kieContainer!!.newKieSession()
+        kieSession.insert(request)
+        kieSession.globals["result"] = result
+        kieSession.fireAllRules()
+        kieSession.dispose()
         return result
     }
 

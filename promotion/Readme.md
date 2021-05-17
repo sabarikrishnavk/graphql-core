@@ -1,8 +1,9 @@
 Steps for Promo calculation
 --
-PromotionEngine : calculateCart(PEReqCart) : PERespCart
+PromotionEngine : calculateCart(PEOrder extends PERequest) : PEResult
 
-1. FindPromotions Controller: Find all item/category Promotions for each SKUS in a group /location
+1. PromotionService.activeSKURules : 
+   Find all item/category Promotions for each SKUS in a group /location
    
    a)Get all active promotions and promotion attributes -WHEN Conditions
        (item.attributes ,category attributes)
@@ -17,7 +18,8 @@ PromotionEngine : calculateCart(PEReqCart) : PERespCart
     
     b) Calculate SKU discounts
    
-3. FindPromotions: Find eligible order and shipping promotions.
+3. PromotionService.activeOrderRules : 
+   FindPromotions: Find eligible order and shipping promotions.
 
 4. ShippingPromotionCalculator: 
     Calculate shipping discounts
