@@ -48,10 +48,16 @@ class PromotionEngineTest {
         highValueOrderCondition.field = "price"
         highValueOrderCondition.operator = PECondition.Operator.GREATER_THAN
         highValueOrderCondition.value = 5000.0
+//        val widgetsIncCustomerCondition = PECondition()
+//        widgetsIncCustomerCondition.field = "skuid"
+//        widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
+//        widgetsIncCustomerCondition.value = "SKU1"
+
+
         val widgetsIncCustomerCondition = PECondition()
         widgetsIncCustomerCondition.field = "skuid"
-        widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
-        widgetsIncCustomerCondition.value = "SKU1"
+        widgetsIncCustomerCondition.operator = PECondition.Operator.IN
+        widgetsIncCustomerCondition.value = "SKU1,SKU2"
 
 
         val sizeCondition = PECondition()
@@ -92,12 +98,19 @@ class PromotionEngineTest {
         val result1 = promotionEngine.evaluate(skuRequest1);
         assertThat(result1.discounts[0].discount).isEqualTo(10.0)
 
-
         val skuRequest2 = PESkuRequest("SKU1",2.0,"STH")
         skuRequest2.price = 1500.0
 
         val result2 = promotionEngine.evaluate(skuRequest2);
-        assertThat(result2.discounts.size).isEqualTo(0);
+        assertThat(result2.discounts.size).isEqualTo(0)
+
+        val skuRequest3 = PESkuRequest("SKU2",2.0,"STH")
+        skuRequest3.price = 5050.0
+        skuRequest3.attr= attr
+
+        val result3 = promotionEngine.evaluate(skuRequest3)
+        assertThat(result3.discounts[0].discount).isEqualTo(10.0)
+//        assertThat(result3.discounts.size).isEqualTo(0)
 
     }
 

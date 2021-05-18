@@ -18,13 +18,32 @@ class PERule {
                 PECondition.Operator.LESS_THAN -> "<"
                 PECondition.Operator.GREATER_THAN_OR_EQUAL_TO -> ">="
                 PECondition.Operator.LESS_THAN_OR_EQUAL_TO -> "<="
+                PECondition.Operator.IN -> "in"
                 else ->  "=="
             }
-            statementBuilder.append(condition.field).append(" ").append(operator).append(" ")
-            if (condition.value is String) {
-                statementBuilder.append("'").append(condition.value).append("'")
-            } else {
-                statementBuilder.append(condition.value)
+            if(condition?.operator!!.equals(PECondition.Operator.IN) && condition.value is String){
+
+                val inConditions = StringBuilder()
+                inConditions.append(condition.field).append(" in (")
+
+                val inValues= (condition.value as String).split(",");
+                for (inValue in inValues) {
+                    inConditions.append(" '").append(inValue).append("' ")
+                    inConditions.append(" , ")
+                }
+                val inStatement = inConditions.toString()
+                statementBuilder.append(inStatement.substring(0, inStatement.length - 4))
+                statementBuilder.append(" ) ")
+
+
+            }else {
+                statementBuilder.append(condition.field).append(" ").append(operator).append(" ")
+
+                if (condition.value is String) {
+                    statementBuilder.append("'").append(condition.value).append("'")
+                } else {
+                    statementBuilder.append(condition.value)
+                }
             }
             statementBuilder.append(" && ")
         }
