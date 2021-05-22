@@ -3,9 +3,6 @@ package com.galaxy.promotion.controller
 
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.foundation.scalars.DateTimeScalarRegistration
-import com.galaxy.promotion.codegen.types.DiscountDetail
-import com.galaxy.promotion.codegen.types.DiscountType
-import com.galaxy.promotion.codegen.types.Discounts
 import com.galaxy.promotion.services.DiscountService
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
@@ -14,6 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.any
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -30,24 +28,24 @@ class PromotionControllerTest {
 
     @BeforeEach
     fun before() {
-        `when`(discountService.discounts()).thenAnswer {
-
-             listOf(
-                Discounts(priceid = "SKU1WH1V1" , skuid = "SKU1", location = "WH1", price =
-                25.0 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
-                )),
-                Discounts(priceid = "SKU1WH2V1" , skuid = "SKU1", location = "WH2", price = 25.0 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.PERCENTAGE_OFF,percentage = 25.0)
-                )),
-                Discounts(priceid = "SKU2WH1V1" , skuid = "SKU2", location = "WH1", price = 25.0 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
-                )),
-                Discounts(priceid = "SKU2WH2V1" , skuid = "SKU2", location = "WH2", price = 25.0 , discountdtl = listOf(
-                    DiscountDetail(type= DiscountType.FIXED_AMOUNT,amountoff = 20.0)
-                )),
-            )
-        }
+//        `when`(discountService.discounts()).thenAnswer {
+//
+//             listOf(
+//                Discounts(priceid = "SKU1WH1V1" , skuid = "SKU1", location = "WH1", price =
+//                25.0 , discountdtl = listOf(
+//                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
+//                )),
+//                Discounts(priceid = "SKU1WH2V1" , skuid = "SKU1", location = "WH2", price = 25.0 , discountdtl = listOf(
+//                    DiscountDetail(type= DiscountType.PERCENTAGE_OFF,percentage = 25.0)
+//                )),
+//                Discounts(priceid = "SKU2WH1V1" , skuid = "SKU2", location = "WH1", price = 25.0 , discountdtl = listOf(
+//                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
+//                )),
+//                Discounts(priceid = "SKU2WH2V1" , skuid = "SKU2", location = "WH2", price = 25.0 , discountdtl = listOf(
+//                    DiscountDetail(type= DiscountType.FIXED_AMOUNT,amountoff = 20.0)
+//                )),
+//            )
+//        }
 
     }
 
@@ -86,7 +84,7 @@ class PromotionControllerTest {
 
     @Test
     fun showsWithException() {
-        `when`(discountService.discounts()).thenThrow(RuntimeException("nothing to see here"))
+        `when`(discountService.discountBySku(any())).thenThrow(RuntimeException("nothing to see here"))
 
         val result = dgsQueryExecutor.execute(
             """
@@ -129,7 +127,7 @@ class PromotionControllerTest {
                     .skuid("SKU1")
                     .location("WH1")
                     .build(),
-                com.galaxy.promotion.codegen.client.DiscountSkuLocationProjectionRoot().discountdtl().amountoff()
+                com.galaxy.promotion.codegen.client.DiscountSkuLocationProjectionRoot().discount()
             )
         val amountoff = dgsQueryExecutor.executeAndExtractJsonPath<List<Integer>>(
             graphQLQueryRequest.serialize(),

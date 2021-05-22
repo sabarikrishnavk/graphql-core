@@ -12,8 +12,7 @@ import graphql.ExecutionResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -31,7 +30,7 @@ class CatalogControllerTest {
 
     @BeforeEach
     fun before() {
-        `when`(skuService.skus()).thenAnswer {
+        `when`(skuService.skus(any())).thenAnswer {
 
              listOf(
                 Sku(skuid = "SKU1", name = "Stranger Things", price = 123),
@@ -60,7 +59,7 @@ class CatalogControllerTest {
 
     @Test
     fun showsWithException() {
-        `when`(skuService.skus()).thenThrow(RuntimeException("nothing to see here"))
+        `when`(skuService.skus(any())).thenThrow(RuntimeException("nothing to see here"))
 
         val result = dgsQueryExecutor.execute(
             """

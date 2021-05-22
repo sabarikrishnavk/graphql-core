@@ -1,5 +1,5 @@
 type Query {
-    skus(skuid: String): [Sku]
+    skus(skuids: [String]): [Sku]
 }
 
 #type Mutation {
@@ -15,11 +15,21 @@ type Sku @key(fields: "skuid"){
     skuid: String!
     name: String!
     price: Int
+    querydate: DateTime
     shortdescription: String
     longdescription: String
     images: [Image]
+    attributes:[Attributes]
 }
 
+type Attributes{
+    attributeid:String!
+    name : String!
+    value: String!
+    searchable: Boolean
+    promotionable: Boolean
+    itemdefining: Boolean
+}
 #
 #type Review {
 #    userId: String

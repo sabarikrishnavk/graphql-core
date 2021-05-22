@@ -49,6 +49,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
+
 // We don't need CSRF for this example
         httpSecurity.csrf().disable()// dont authenticate this particular request
             .authorizeRequests()

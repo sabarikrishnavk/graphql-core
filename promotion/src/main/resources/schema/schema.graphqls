@@ -5,37 +5,49 @@ type Query {
 type Mutation {
     evaluatePromotion(cart: Cart!): ReturnCart
 }
-type Price @key(fields: "priceid" )  @extends {
-    priceid: String! @external
-    discounts: [Discounts]
-}
 input Cart{
     cartid : String!
-    paymenttype:String
+    location: String!
+    payments:[CartPayment]
+    items :[CartItem]
     totalprice :Float
-    discount :Float
+}
+input CartItem{
+    skuid : String!
+    quantity :Float
+    shipmode: String
+    price :Float
+}
+input CartPayment{
+    paymenttype : String!
+    price :Float
 }
 
 type ReturnCart{
     cartid : String!
-    paymenttype:String
     totalprice :Float
-    discount :Float
+    items: [ReturnCartItem]
+    payments:[ReturnCartPayment]
+    discounts :[Discounts]
+}
+type ReturnCartItem{
+    skuid : String!
+    quantity :Float
+    price :Float
+    discounts :[Discounts]
+}
+type ReturnCartPayment{
+    skuid : String!
+    quantity :Float
+    price :Float
+    discounts :[Discounts]
 }
 type Discounts {
-    priceid: String!
-    skuid: String!
     location: String!
-    price: Float
-    discountdtl: [DiscountDetail]
+    promotionid: String!
+    discount : Float
+    discounttype: DiscountType
 }
-type DiscountDetail{
-    type: DiscountType
-    percentage : Float
-    fixed: Float
-    amountoff: Float
-}
-
 enum DiscountType {
     PERCENTAGE_OFF
     AMOUNT_OFF

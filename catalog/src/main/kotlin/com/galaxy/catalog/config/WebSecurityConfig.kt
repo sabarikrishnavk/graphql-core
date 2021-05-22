@@ -54,6 +54,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
             .authorizeRequests()
             .antMatchers("/graphiql").permitAll()
             .antMatchers("/actuator").permitAll()
+//            .antMatchers("/graphql").permitAll()
             .anyRequest ().authenticated()
             .and()
             .exceptionHandling()

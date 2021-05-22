@@ -9,14 +9,21 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
 
 
     @Throws(Exception::class)
-    fun evaluate(request: PERequest ): PEResult {
-        val result = PEResult()
-        val kieSession = kieContainer!!.newKieSession()
-        kieSession.insert(request)
-        kieSession.globals["result"] = result
-        kieSession.fireAllRules()
-        kieSession.dispose()
-        return result
+    fun evaluate(requestList: List<PERequest> ): List<PEResult> {
+
+        var results= mutableListOf<PEResult>()
+        for (request in requestList) {
+            val result = PEResult()
+
+            val kieSession = kieContainer!!.newKieSession()
+            kieSession.insert(request)
+            kieSession.globals["result"] = result
+            kieSession.fireAllRules()
+            kieSession.dispose()
+
+            results.add(result)
+        }
+        return results
     }
 
 }

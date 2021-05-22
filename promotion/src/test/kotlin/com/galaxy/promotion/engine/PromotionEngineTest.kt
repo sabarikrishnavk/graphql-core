@@ -3,12 +3,12 @@ package com.galaxy.promotion.engine
 
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.foundation.scalars.DateTimeScalarRegistration
-import com.galaxy.promotion.codegen.types.DiscountDetail
 import com.galaxy.promotion.codegen.types.DiscountType
 import com.galaxy.promotion.codegen.types.Discounts
 import com.galaxy.promotion.config.DroolsConfiguration
 import com.galaxy.promotion.services.DiscountService
 import com.galaxy.promotion.services.PromotionService
+import com.google.gson.Gson
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
 import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest
@@ -74,6 +74,9 @@ class PromotionEngineTest {
         highValueOrderWidgetsIncRule.action= action
         highValueOrderWidgetsIncRule.requestClassName= PESkuRequest::class.java.name
 
+        val gson = Gson().toJson(highValueOrderWidgetsIncRule).replace("\"","'")
+        println(gson);
+
 
         `when`(promotionService.activeSKURules()).thenAnswer {
 
@@ -95,21 +98,29 @@ class PromotionEngineTest {
         skuRequest1.attr= attr
         skuRequest1.price = 10500.0
 
-        val result1 = promotionEngine.evaluate(skuRequest1);
-        assertThat(result1.discounts[0].discount).isEqualTo(10.0)
-
-        val skuRequest2 = PESkuRequest("SKU1",2.0,"STH")
+        val skuRequest2 = PESkuRequest("SKU2",2.0,"STH")
         skuRequest2.price = 1500.0
-
-        val result2 = promotionEngine.evaluate(skuRequest2);
-        assertThat(result2.discounts.size).isEqualTo(0)
-
-        val skuRequest3 = PESkuRequest("SKU2",2.0,"STH")
+        val skuRequest3 = PESkuRequest("SKU1",2.0,"STH")
         skuRequest3.price = 5050.0
         skuRequest3.attr= attr
 
-        val result3 = promotionEngine.evaluate(skuRequest3)
-        assertThat(result3.discounts[0].discount).isEqualTo(10.0)
+        var request = mutableListOf<PESkuRequest>()
+        request.add(skuRequest1);
+
+        val result1 = promotionEngine.evaluate(request);
+        assertThat(result1[0].discounts[0].discount).isEqualTo(10.0)
+
+        request = mutableListOf<PESkuRequest>()
+        request.add(skuRequest2);
+
+        val result2 = promotionEngine.evaluate(request);
+        assertThat(result2[0].discounts.size).isEqualTo(0)
+
+        request = mutableListOf<PESkuRequest>()
+        request.add(skuRequest3);
+
+        val result3 = promotionEngine.evaluate(request)
+        assertThat(result3[0].discounts[0].discount).isEqualTo(10.0)
 //        assertThat(result3.discounts.size).isEqualTo(0)
 
     }

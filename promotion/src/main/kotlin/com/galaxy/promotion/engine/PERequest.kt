@@ -2,7 +2,6 @@ package com.galaxy.promotion.engine
 
 
 open class PERequest() {
-
     var price: Double? = null
     var location: String? = null
     var attr:Map<String,String> = mapOf();
