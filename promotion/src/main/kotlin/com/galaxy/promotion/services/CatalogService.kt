@@ -3,6 +3,7 @@ package com.galaxy.promotion.services
 import com.galaxy.catalog.codegen.client.SkusGraphQLQuery
 import com.galaxy.catalog.codegen.client.SkusProjectionRoot
 import com.galaxy.catalog.codegen.types.Sku
+import com.galaxy.foundation.context.CustomContext
 import com.galaxy.promotion.util.UrlProperties
 import com.jayway.jsonpath.TypeRef
 import com.netflix.graphql.dgs.client.DefaultGraphQLClient
@@ -28,7 +29,7 @@ class CatalogService (val restTemplate: RestTemplate , val urlProperties: UrlPro
      */
 
 
-    fun getSkuDetails(skuids: List<String?>?)  : List<Sku?>? {
+    fun getSkuDetails(skuids: List<String?>?,context: CustomContext)  : List<Sku?>? {
 
 
         val graphQLClient = DefaultGraphQLClient(urlProperties.catalog)
@@ -48,7 +49,7 @@ class CatalogService (val restTemplate: RestTemplate , val urlProperties: UrlPro
                 "  }\n" +
                 "}"
         val requestHeaders = HttpHeaders()
-        requestHeaders.set("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJHYWxheHkiLCJzdWIiOiJ0ZXN0dXNlciIsIm5hbWUiOiJ0ZXN0dXNlciIsInVzZXJJZCI6ImY2OTE1NjJkLWY2ZDMtNDE4Zi1hMWMzLTJiNTFjYTI4NTRjNCIsInJvbGUiOiJSRUdJU1RFUkVEIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjIxNDU2NTY1LCJleHAiOjE2MjIwNjEzNjV9.gZqZATF-Y33EJxPMyAxkkewGyVdAtXR3P9ON2xOLE5VD5Q4iCms-oFqVEoo2LZ3vkTwF67ELP9O9t4pjmVn79w")
+        requestHeaders.set("Authorization",context.bearerToken)
         //headers.forEach(requestHeaders::put)
 
         val response =

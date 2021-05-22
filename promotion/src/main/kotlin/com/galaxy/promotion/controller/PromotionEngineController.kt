@@ -1,14 +1,16 @@
 package com.galaxy.promotion.controller
 
+import com.galaxy.foundation.context.CustomContext
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.promotion.codegen.types.*
-import com.galaxy.promotion.engine.PEOrder
-import com.galaxy.promotion.engine.PEResult
 import com.galaxy.promotion.engine.PESkuRequest
 import com.galaxy.promotion.engine.PromotionEngine
 import com.galaxy.promotion.services.CatalogService
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
+import com.netflix.graphql.dgs.context.DgsContext
+import graphql.schema.DataFetchingEnvironment
+
 
 @DgsComponent
 class PromotionEngineController(private val promotionEngine: PromotionEngine ,
@@ -16,13 +18,13 @@ class PromotionEngineController(private val promotionEngine: PromotionEngine ,
                                 val eventLogger: EventLogger){
 
     @DgsMutation
-    fun evaluatePromotion( cart: Cart?): ReturnCart? {
+    fun evaluatePromotion( cart: Cart?, dfe: DataFetchingEnvironment?): ReturnCart? {
 
         //val peOrder = PEOrder(cart.cartid,cart.totalprice,cart.discount)
-
+         val context= DgsContext.getCustomContext<CustomContext>(dfe!!);
         var skuids = cart?.items?.map { it?.skuid }
 
-        catalogService.getSkuDetails(skuids);
+        catalogService.getSkuDetails(skuids,context);
 
 
         val skuRequest = PESkuRequest("SKU1",2.0,"STH")
