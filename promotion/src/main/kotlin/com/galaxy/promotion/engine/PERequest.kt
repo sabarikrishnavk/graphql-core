@@ -4,7 +4,7 @@ package com.galaxy.promotion.engine
 open class PERequest() {
     var price: Double? = null
     var location: String? = null
-    var attr:Map<String,String> = mapOf();
+    var attr:Map<String,String>? = mapOf();
 }
 
 class PEOrder(var orderid: String ,var totalsku: Double? , var totalshipping: Double? ,var totaldiscount: Double?, var total: Double?  ) : PERequest()

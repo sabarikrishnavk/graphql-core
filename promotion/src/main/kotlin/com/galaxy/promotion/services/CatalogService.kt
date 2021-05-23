@@ -45,6 +45,7 @@ class CatalogService (val restTemplate: RestTemplate , val urlProperties: UrlPro
                 "        attributeid\n" +
                 "        name\n" +
                 "        value\n" +
+                "        promotionable\n" +
                 "    }\n" +
                 "  }\n" +
                 "}"
@@ -67,6 +68,8 @@ class CatalogService (val restTemplate: RestTemplate , val urlProperties: UrlPro
                     HttpResponse(exchange.statusCodeValue, exchange.body)
                 })
         var skus = response.extractValueAsObject("skus", object : TypeRef<List<Sku?>?>() {})
+
+
         return skus
     }
 

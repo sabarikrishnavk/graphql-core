@@ -9,12 +9,12 @@ input Cart{
     cartid : String!
     location: String!
     payments:[CartPayment]
-    items :[CartItem]
+    items :[CartItem]!
     totalprice :Float
 }
 input CartItem{
     skuid : String!
-    quantity :Float
+    quantity :Float!
     shipmode: String
     price :Float
 }

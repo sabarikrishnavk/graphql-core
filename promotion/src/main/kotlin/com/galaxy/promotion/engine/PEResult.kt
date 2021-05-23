@@ -1,6 +1,8 @@
 package com.galaxy.promotion.engine
 
 import com.google.gson.Gson
+import java.util.ArrayList
+import java.util.List
 
 /**
  * Result interface and possible results
@@ -8,7 +10,7 @@ import com.google.gson.Gson
 
 val gson = Gson()
 class PEResult{
-    var discounts = mutableListOf<PEDiscount>()
+    var discounts  = mutableListOf<PEDiscount>()
     fun add(discount: PEDiscount){
         discounts.add(discount)
     }

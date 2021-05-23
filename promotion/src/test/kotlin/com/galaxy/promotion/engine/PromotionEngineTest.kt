@@ -47,7 +47,7 @@ class PromotionEngineTest {
         val highValueOrderCondition = PECondition()
         highValueOrderCondition.field = "price"
         highValueOrderCondition.operator = PECondition.Operator.GREATER_THAN
-        highValueOrderCondition.value = 5000.0
+        highValueOrderCondition.value = 100.0
 //        val widgetsIncCustomerCondition = PECondition()
 //        widgetsIncCustomerCondition.field = "skuid"
 //        widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
@@ -87,7 +87,7 @@ class PromotionEngineTest {
     }
 
     @Test
-    fun evalulateSkuRequest() {
+    fun evaluateSkuRequest() {
 
 //        println("Rules drl: "+drl)
 
@@ -95,32 +95,35 @@ class PromotionEngineTest {
         val attr = HashMap<String,String>();
         attr.put("color","blue");
         attr.put("size","M")
+        skuRequest1.location="STR1"
         skuRequest1.attr= attr
-        skuRequest1.price = 10500.0
+        skuRequest1.price = 150.0
 
         val skuRequest2 = PESkuRequest("SKU2",2.0,"STH")
-        skuRequest2.price = 1500.0
+        skuRequest2.price = 200.0
+        skuRequest2.location="STR1"
         val skuRequest3 = PESkuRequest("SKU1",2.0,"STH")
-        skuRequest3.price = 5050.0
+        skuRequest3.price = 150.0
+        skuRequest3.location="STR1"
         skuRequest3.attr= attr
 
         var request = mutableListOf<PESkuRequest>()
         request.add(skuRequest1);
 
-        val result1 = promotionEngine.evaluate(request);
-        assertThat(result1[0].discounts[0].discount).isEqualTo(10.0)
+        val result1 = promotionEngine.evaluateSkuRequest(request);
+        assertThat(result1!!.get(0)!!.discounts!!.get(0)!!.discount).isEqualTo(10.0)
 
         request = mutableListOf<PESkuRequest>()
         request.add(skuRequest2);
 
-        val result2 = promotionEngine.evaluate(request);
-        assertThat(result2[0].discounts.size).isEqualTo(0)
+        val result2 = promotionEngine.evaluateSkuRequest(request);
+       assertThat(result2!!.get(0)!!.discounts!!.size).isEqualTo(0)
 
         request = mutableListOf<PESkuRequest>()
         request.add(skuRequest3);
 
-        val result3 = promotionEngine.evaluate(request)
-        assertThat(result3[0].discounts[0].discount).isEqualTo(10.0)
+        val result3 = promotionEngine.evaluateSkuRequest(request)
+        assertThat(result3!!.get(0)!!.discounts!!.get(0)!!.discount).isEqualTo(10.0)
 //        assertThat(result3.discounts.size).isEqualTo(0)
 
     }

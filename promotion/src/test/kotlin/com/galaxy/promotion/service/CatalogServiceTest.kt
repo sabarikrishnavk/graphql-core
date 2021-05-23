@@ -31,8 +31,8 @@ class CatalogServiceTest {
         val skuids = listOf<String>("SKU1","SKU2")
         val context = CustomContext()
         context.bearerToken ="Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJHYWxheHkiLCJzdWIiOiJ0ZXN0dXNlciIsIm5hbWUiOiJ0ZXN0dXNlciIsInVzZXJJZCI6ImY2OTE1NjJkLWY2ZDMtNDE4Zi1hMWMzLTJiNTFjYTI4NTRjNCIsInJvbGUiOiJSRUdJU1RFUkVEIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjIxNDU2NTY1LCJleHAiOjE2MjIwNjEzNjV9.gZqZATF-Y33EJxPMyAxkkewGyVdAtXR3P9ON2xOLE5VD5Q4iCms-oFqVEoo2LZ3vkTwF67ELP9O9t4pjmVn79w"
-        val skus= catalogService.getSkuDetails(skuids,context)
-        for (sku in skus!!.listIterator()){
+        val skuMap= catalogService.getSkuDetails(skuids,context)
+        for (sku in skuMap!!){
             println(sku)
         }
 

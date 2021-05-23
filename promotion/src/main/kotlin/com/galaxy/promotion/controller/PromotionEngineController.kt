@@ -1,5 +1,6 @@
 package com.galaxy.promotion.controller
 
+import com.galaxy.catalog.codegen.types.Sku
 import com.galaxy.foundation.context.CustomContext
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.promotion.codegen.types.*
@@ -24,23 +25,33 @@ class PromotionEngineController(private val promotionEngine: PromotionEngine ,
          val context= DgsContext.getCustomContext<CustomContext>(dfe!!);
         var skuids = cart?.items?.map { it?.skuid }
 
-        catalogService.getSkuDetails(skuids,context);
+        val skus = catalogService.getSkuDetails(skuids,context);
 
-
-        val skuRequest = PESkuRequest("SKU1",2.0,"STH")
-        skuRequest.price = cart?.totalprice
-        val attr = HashMap<String,String>();
-        attr.put("color","blue");
-        attr.put("size","M")
-        skuRequest.attr= attr
+        val priceMap = mutableMapOf<String,Double>()
+        val skuMap = mutableMapOf<String,Map<String,String>>()
+        skus!!.forEach {
+            skuMap.put(it!!.skuid,
+                it!!.attributes!!.filter { it!!.promotionable!! }
+                    .associateBy({ it!!.name }, { it!!.value })
+            )
+            priceMap.put(it!!.skuid,  it!!.price!!)
+        }
 
         var request = mutableListOf<PESkuRequest>()
-        request.add(skuRequest)
-        val peResult= promotionEngine.evaluate(request);
+        cart!!.items!!.forEach {
+            val skuRequest = PESkuRequest(it!!.skuid,it!!.quantity!!,it.shipmode!!)
+            skuRequest.price = priceMap.get(it!!.skuid)
+            skuRequest.attr = skuMap.get(it!!.skuid)
+            skuRequest.location= cart.location
+            request.add(skuRequest)
+        }
 
-        val discounts = peResult[0].discounts.get(0).discount;
 
-        val result = ReturnCart(cart!!.cartid, cart.totalprice, listOf<ReturnCartItem>(), listOf<ReturnCartPayment>(),
+        val returnCartItems = promotionEngine.evaluateSkuRequest(request);
+
+
+
+        val result = ReturnCart(cart!!.cartid, cart.totalprice, returnCartItems, listOf<ReturnCartPayment>(),
             listOf())
 
         return result

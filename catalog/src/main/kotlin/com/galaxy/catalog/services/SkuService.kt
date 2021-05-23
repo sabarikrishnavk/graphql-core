@@ -25,14 +25,14 @@ class SkuService (val eventLogger: EventLogger){
 
          var attributes2 = listOf(
              Attributes("ATTR3","origin","US",true,false,false),
-             Attributes("ATTR4","brand","adida",true,true,false)
+             Attributes("ATTR4","brand","adidas",true,true,false)
 
          )
 
         return listOf(
-            Sku(skuid = "SKU1", name = "Stranger Things", price = 123, attributes = listOf(attributes1.get(0),attributes1.get(3), attributes2.get(0),attributes2.get(1) ) ),
-            Sku(skuid = "SKU2", name = " Things", price = 456, attributes = listOf(attributes1.get(1),attributes1.get(4), attributes2.get(0),attributes2.get(1) ) ),
-            Sku(skuid = "SKU3", name = "Stranger ", price = 789, attributes = listOf(attributes1.get(2),attributes1.get(5), attributes2.get(0),attributes2.get(1) ) )
+            Sku(skuid = "SKU1", name = "Stranger Things", price = 150, attributes = listOf(attributes1.get(0),attributes1.get(3), attributes2.get(0),attributes2.get(1) ) ),
+            Sku(skuid = "SKU2", name = " Things", price = 200, attributes = listOf(attributes1.get(1),attributes1.get(4), attributes2.get(0),attributes2.get(1) ) ),
+            Sku(skuid = "SKU3", name = "Stranger ", price = 25, attributes = listOf(attributes1.get(2),attributes1.get(5), attributes2.get(0),attributes2.get(1) ) )
         )
     }
 }

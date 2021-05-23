@@ -12,7 +12,7 @@ public data class Sku(
   @JsonProperty("name")
   public val name: String,
   @JsonProperty("price")
-  public val price: Int? = null,
+  public val price: Double? = null,
   @JsonProperty("querydate")
   public val querydate: OffsetDateTime? = null,
   @JsonProperty("shortdescription")
