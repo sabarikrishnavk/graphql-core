@@ -61,19 +61,23 @@ class JwtUtils (private val jwtProperties: JwtProperties){
         return true
     }
 
-    fun getJwtUser(jwtToken: String?): JwtUser {
-        val claims= Jwts.parser().setSigningKey(jwtProperties.secretkey).parseClaimsJws(jwtToken).getBody()
+    fun getJwtUser(jwtToken: String?): JwtUser? {
+        if (jwtToken != null) {
+            val claims = Jwts.parser().setSigningKey(jwtProperties.secretkey).parseClaimsJws(jwtToken).getBody()
 
-        val roleArray= claims.get("role").toString().split(",");
-        val roles: List<UserType>? =
+            val roleArray = claims.get("role").toString().split(",");
+            val roles: List<UserType>? =
                 roleArray.map { role -> UserType.valueOf(role) }
-                .toList();
+                    .toList();
 
-        return JwtUser(claims.get("userId") as String?,
-            claims.get("name") as String?,
-            claims.get("email") as String,
-            roles
-        )
+            return JwtUser(
+                claims.get("userId") as String?,
+                claims.get("name") as String?,
+                claims.get("email") as String,
+                roles
+            )
+        }
+        return null
     }
 }
 

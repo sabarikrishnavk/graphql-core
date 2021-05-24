@@ -21,7 +21,6 @@ class PromotionEngineController(private val promotionEngine: PromotionEngine ,
     @DgsMutation
     fun evaluatePromotion( cart: Cart?, dfe: DataFetchingEnvironment?): ReturnCart? {
 
-        //val peOrder = PEOrder(cart.cartid,cart.totalprice,cart.discount)
          val context= DgsContext.getCustomContext<CustomContext>(dfe!!);
         var skuids = cart?.items?.map { it?.skuid }
 

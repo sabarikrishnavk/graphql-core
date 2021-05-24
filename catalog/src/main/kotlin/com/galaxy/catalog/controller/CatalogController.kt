@@ -30,6 +30,6 @@ class CatalogController(private val skuService: SkuService ) {
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun getStoreId(dfe: DataFetchingEnvironment?): String? {
         val customContext: CustomContext = DgsContext.getCustomContext(dfe!!)
-        return customContext.storeId
+        return customContext.location
     }
 }

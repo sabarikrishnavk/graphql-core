@@ -26,7 +26,7 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
             var discounts = mutableListOf<Discounts?>()
 
             result.discounts.forEach {
-                discounts.add(Discounts(request.location!! , "", it.discount, DiscountType.FIXED_AMOUNT ) )
+                discounts.add(Discounts(request.location!! , it.promotionid , it.discount, DiscountType.FIXED_AMOUNT ) )
             }
 
             var returnCartItem = ReturnCartItem(request.skuid, request.quantity, request.price , discounts)
