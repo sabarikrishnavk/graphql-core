@@ -2,6 +2,8 @@ package com.galaxy.foundation.jwt.config
 
 
 import com.galaxy.foundation.JwtUtils
+import com.galaxy.foundation.constants.HEADER_AUTH
+import com.galaxy.foundation.constants.HEADER_BEARER
 import com.galaxy.foundation.instrumentation.GraphqlTracingInstrumentation
 import com.galaxy.foundation.spring.ext.CustomUserDetails
 import com.galaxy.foundation.spring.ext.CustomUserDetailsService
@@ -33,12 +35,12 @@ class JwtRequestFilter : OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
-        val requestTokenHeader = request.getHeader("Authorization")
+        val requestTokenHeader = request.getHeader(HEADER_AUTH)
         var username: String? = null
         var jwtToken: String? = null
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
 // only the Token
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader != null && requestTokenHeader.startsWith(HEADER_BEARER)) {
             jwtToken = requestTokenHeader.substring(7)
             try {
                 username = jwtTokenUtil?.getUserNameFromJwtToken(jwtToken)
@@ -63,7 +65,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
                     userDetails, null, userDetails.authorities
                 )
                 usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                // After setting the Authentication in the context, we specify
+// After setting the Authentication in the context, we specify
 // that the current user is authenticated. So it passes the
 // Spring Security Configurations successfully.
                 SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken

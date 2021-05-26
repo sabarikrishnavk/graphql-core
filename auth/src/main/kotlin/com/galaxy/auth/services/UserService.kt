@@ -15,16 +15,16 @@ import java.util.*
 @Service
 class UserService (private val jwtProperties: JwtProperties) {
 
-    fun signup(email: String, password: String, username: String): AuthPayload? {
+    fun signup(email: String, password: String, username: String,location: String ): AuthPayload? {
 
-        val jwtUser= JwtUser( UUID.randomUUID().toString(),username,email, listOf(UserType.REGISTERED));
+        val jwtUser= JwtUser( UUID.randomUUID().toString(),username,email,location, listOf(UserType.REGISTERED));
         val token = JwtUtils(jwtProperties).generateAccessToken(jwtUser);
         return AuthPayload(token,true)
     }
-     fun signin(email: String, password: String ): AuthPayload? {
+     fun signin(email: String, password: String, location: String ): AuthPayload? {
 
          val username = "dbuser" //Authenticate and get username and other details.
-         val jwtUser= JwtUser( UUID.randomUUID().toString(),username,email, listOf(UserType.REGISTERED));
+         val jwtUser= JwtUser( UUID.randomUUID().toString(),username,email, location, listOf(UserType.REGISTERED));
          val token = JwtUtils(jwtProperties).generateAccessToken(jwtUser);
          return AuthPayload(token,true)
     }

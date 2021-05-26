@@ -1,5 +1,6 @@
 package com.galaxy.foundation
 
+import com.galaxy.foundation.constants.*
 import com.galaxy.foundation.jwt.JwtProperties
 import com.galaxy.foundation.jwt.JwtUser
 import com.galaxy.foundation.jwt.UserType
@@ -8,11 +9,8 @@ import io.jsonwebtoken.*
 import io.jsonwebtoken.security.SignatureException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.util.*
-import java.util.stream.Collectors
 
 
 @Component
@@ -20,17 +18,20 @@ class JwtUtils (private val jwtProperties: JwtProperties){
 
     private val logger: Logger = LoggerFactory.getLogger(JwtUtils::class.java)
 
+
     fun generateAccessToken(user: JwtUser): String {
         val role: String? = user.roles?.joinToString (",")
+
         val token = Jwts.builder()
-            .setIssuer("Galaxy")
+            .setIssuer(JWT_ISSUER)
             .setSubject(user.name)
-            .claim("name", user.name)
-            .claim("userId", user.userId)
-            .claim("role", role)
-            .claim("email", user.email)
+            .claim(JWT_NAME, user.name)
+            .claim(JWT_USERID, user.userId)
+            .claim(JWT_ROLE, role)
+            .claim(JWT_EMAIL, user.email)
+            .claim(JWT_LOCATION, user.location)
             .setIssuedAt(Date())
-            .setExpiration(Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000))
+            .setExpiration(Date(System.currentTimeMillis() + JWT_EXPIRATION))
             .signWith(SignatureAlgorithm.HS512, jwtProperties.secretkey)
             .compact()
         return token
@@ -65,15 +66,16 @@ class JwtUtils (private val jwtProperties: JwtProperties){
         if (jwtToken != null) {
             val claims = Jwts.parser().setSigningKey(jwtProperties.secretkey).parseClaimsJws(jwtToken).getBody()
 
-            val roleArray = claims.get("role").toString().split(",");
+            val roleArray = claims.get(JWT_ROLE).toString().split(",");
             val roles: List<UserType>? =
                 roleArray.map { role -> UserType.valueOf(role) }
                     .toList();
 
             return JwtUser(
-                claims.get("userId") as String?,
-                claims.get("name") as String?,
-                claims.get("email") as String,
+                claims.get(JWT_USERID) as String?,
+                claims.get(JWT_NAME) as String?,
+                claims.get(JWT_EMAIL) as String,
+                claims.get(JWT_LOCATION) as String,
                 roles
             )
         }

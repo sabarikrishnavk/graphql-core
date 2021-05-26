@@ -23,6 +23,7 @@ class PEDiscount(
     var promotionid :String ,
     var promotiondescription: String ,
     var discount: Double ,
+    var percentage: Double,
     var skuid: String? ,
     var shipmodemode: String?
 ){

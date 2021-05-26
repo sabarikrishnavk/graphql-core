@@ -67,7 +67,7 @@ class PromotionEngineTest {
 
         val action = PEAction(
             PEDiscount(promotionid = "PROMO1",promotiondescription = "First promo",
-                discount = 10.0 , "","")
+                discount = 10.0 , 0.0,"","")
         )
 
         highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition, widgetsIncCustomerCondition,sizeCondition)
