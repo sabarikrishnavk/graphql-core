@@ -14,4 +14,13 @@ class PriceService {
             Price(skuid = "SKU2", location = "STR2", price = 55.5 , wasprice = 25.0, listprice = 50.5,priceid = "SKU2WH2V1")
         )
     }
+    fun price(skuids : List<String> ): List<Price>{
+        return price()
+    }
+    fun price(skuids : List<String> , location : String): List<Price>{
+        return price()
+    }
+    fun price(skuid : String): List<Price>{
+        return price()
+    }
 }

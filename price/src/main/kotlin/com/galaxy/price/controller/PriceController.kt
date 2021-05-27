@@ -20,35 +20,23 @@ class PriceController(private val priceService: PriceService , val eventLogger: 
     fun skus( values : Map<String,String> ): Sku?{
         return values.get("skuid")?.let { Sku(it) }
     }
-    @DgsData(parentType = "Sku" , field="price")
+    @DgsData(parentType = "Sku" , field="prices")
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun skuprice(dfe: DataFetchingEnvironment): List<Price> {
         val sku = dfe.getSource<Sku>();
-        return if(sku.skuid != null) {
-            priceService.price().filter { it.skuid.contains(sku.skuid) }
-        } else {
-            priceService.price()
-        }
+        return  priceService.price(sku.skuid)
     }
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
-    fun priceSkuLocation(@InputArgument skuid : String?,@InputArgument location : String?): List<Price> {
+    fun priceSkusLocation(@InputArgument skuids : List<String>,@InputArgument location : String): List<Price> {
 
-        eventLogger.log(Level.INFO,"priceSkuLocation",PriceEventType.PRICE_SAVE, skuid,location)
-        return if(skuid != null) {
-            priceService.price().filter { it.skuid.contains(skuid) }
-        } else {
-            priceService.price()
-        }
+        eventLogger.log(Level.INFO,"priceSkuLocation",PriceEventType.PRICE_SAVE, skuids,location)
+        return priceService.price(skuids,location)
     }
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
-    fun priceBySku(@InputArgument skuid : String? ): List<Price> {
-        eventLogger.log(Level.INFO,"priceBySku",PriceEventType.PRICE_SAVE, skuid)
-        return if(skuid != null) {
-            priceService.price().filter { it.skuid.contains(skuid) }
-        } else {
-            priceService.price()
-        }
+    fun priceBySkus(@InputArgument skuids : List<String> ): List<Price> {
+        eventLogger.log(Level.INFO,"priceBySku",PriceEventType.PRICE_SAVE, skuids)
+        return priceService.price(skuids)
     }
 }

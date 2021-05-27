@@ -14,4 +14,14 @@ class InventoryService {
             Inventory(skuid = "SKU2", location = "WH2", totalQty = 5)
         )
     }
+    fun inventory(skuids : List<String>): List<com.galaxy.inventory.codegen.types.Inventory> {
+        return  inventory()
+    }
+    fun inventory(skuids : List<String>,location: String): List<com.galaxy.inventory.codegen.types.Inventory> {
+        return  inventory()
+    }
+
+    fun inventory(skuid : String): List<com.galaxy.inventory.codegen.types.Inventory> {
+        return  inventory()
+    }
 }

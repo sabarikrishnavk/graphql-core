@@ -21,28 +21,16 @@ class InventoryController(private val inventoryService: InventoryService) {
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun skuinventory(dfe: DataFetchingEnvironment): List<Inventory> {
         val sku = dfe.getSource<Sku>();
-        return if(sku.skuid != null) {
-            inventoryService.inventory().filter { it.skuid.contains(sku.skuid) }
-        } else {
-            inventoryService.inventory()
-        }
+        return inventoryService.inventory(sku.skuid)
     }
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
-    fun inventorySkuLocation(@InputArgument skuid : String?,@InputArgument location : String?): List<Inventory> {
-        return if(skuid != null) {
-            inventoryService.inventory().filter { it.skuid.contains(skuid) }
-        } else {
-            inventoryService.inventory()
-        }
+    fun inventorySkusLocation(@InputArgument skuids : List<String>,@InputArgument location : String): List<Inventory> {
+        return  inventoryService.inventory(skuids,location)
     }
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
-    fun inventoryBySku(@InputArgument skuid : String? ): List<Inventory> {
-        return if(skuid != null) {
-            inventoryService.inventory().filter { it.skuid.contains(skuid) }
-        } else {
-            inventoryService.inventory()
-        }
+    fun inventoryBySkus(@InputArgument skuids : List<String> ): List<Inventory> {
+        return inventoryService.inventory(skuids)
     }
 }

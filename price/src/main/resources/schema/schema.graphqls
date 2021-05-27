@@ -1,6 +1,6 @@
 type Query {
-    priceSkuLocation(skuid: String!, location: String! ): [Price]
-    priceBySku(skuid: String!  ): [Price]
+    priceSkusLocation(skuids: [String], location: String! ): [Price]
+    priceBySkus(skuids : [String]  ): [Price]
 }
 type Mutation {
     addPrice(price: SubmittedPrice): [Price]
@@ -8,7 +8,7 @@ type Mutation {
 
 type Sku @key(fields: "skuid")  @extends {
     skuid: String! @external
-    price: [Price]
+    prices: [Price]
 }
 
 type Price {

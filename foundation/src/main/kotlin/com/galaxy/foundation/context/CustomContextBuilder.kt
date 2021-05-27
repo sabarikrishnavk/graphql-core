@@ -1,10 +1,7 @@
 package com.galaxy.foundation.context
 
 import com.galaxy.foundation.JwtUtils
-import com.galaxy.foundation.constants.DEFAULT_LOCATION
-import com.galaxy.foundation.constants.DEFAULT_USER
-import com.galaxy.foundation.constants.HEADER_AUTH
-import com.galaxy.foundation.constants.HEADER_LOCATION
+import com.galaxy.foundation.constants.*
 import com.netflix.graphql.dgs.context.DgsCustomContextBuilder
 import com.netflix.graphql.dgs.context.DgsCustomContextBuilderWithRequest
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,11 +21,13 @@ class CustomContextBuilder : DgsCustomContextBuilderWithRequest<CustomContext?> 
 
         val location = headers?.get(HEADER_LOCATION)?.get(0) ?: DEFAULT_LOCATION
         val requestTokenHeader = headers?.get(HEADER_AUTH)?.get(0)
-        val jwtToken = requestTokenHeader?.substring(7)
-        val jwtUser = jwtTokenUtil?.getJwtUser(jwtToken)
-        context.bearerToken =  requestTokenHeader
-        context.userId = jwtUser?.userId.toString()  ?: DEFAULT_USER
-        context.location = jwtUser?.location.toString()  ?: location
+        if(requestTokenHeader !=null  && requestTokenHeader.startsWith(HEADER_BEARER)) {
+            val jwtToken = requestTokenHeader?.substring(7)
+            val jwtUser = jwtTokenUtil?.getJwtUser(jwtToken)
+            context.bearerToken = requestTokenHeader
+            context.userId = jwtUser?.userId.toString() ?: DEFAULT_USER
+            context.location = jwtUser?.location.toString() ?: location
+        }
         return context
     }
 

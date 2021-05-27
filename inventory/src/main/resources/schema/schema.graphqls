@@ -1,6 +1,6 @@
 type Query {
-    inventorySkuLocation(skuid: String!, location: String! ): [Inventory]
-    inventoryBySku(skuid: String!  ): [Inventory]
+    inventorySkusLocation(skuids: [String], location: String! ): [Inventory]
+    inventoryBySkus(skuids: [String]  ): [Inventory]
 }
 type Mutation {
     addInventory(inventory: SubmittedInventory): [Inventory]
