@@ -18,7 +18,11 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
         for (request in requestList) {
             var discounts = fireRules(request)
 
-            var returnCartItem = ReturnCartItem(request.skuid, request.quantity, request.price,   request.quantity.times( request.price ) , discounts)
+            var totaldiscount = 0.0
+            discounts?.forEach {
+                    discount -> totaldiscount = totaldiscount.plus(discount!!.discount)
+            }
+            var returnCartItem = ReturnCartItem(request.skuid, request.quantity,    request.quantity.times( request.price ).minus(totaldiscount) , request.price,totaldiscount, discounts)
 
 
             results.add(returnCartItem)

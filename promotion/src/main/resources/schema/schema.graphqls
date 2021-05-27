@@ -52,6 +52,7 @@ type ReturnCartItem{
     quantity :Float!
     price :Float!
     skuprice :Float!
+    discount :Float!
     discounts :[Discounts]
 }
 type ReturnCartPayment{
