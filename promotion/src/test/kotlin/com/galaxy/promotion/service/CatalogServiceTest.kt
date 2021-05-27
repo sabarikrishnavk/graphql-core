@@ -1,6 +1,5 @@
 package com.galaxy.promotion.service
 
-import com.galaxy.catalog.codegen.types.Sku
 import com.galaxy.foundation.context.CustomContext
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.promotion.services.CatalogService

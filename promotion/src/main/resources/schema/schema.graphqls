@@ -5,6 +5,22 @@ type Query {
 type Mutation {
     evaluatePromotion(cart: Cart!): ReturnCart
 }
+
+type Sku @key(fields: "skuid")  @extends {
+    skuid: String! @external
+    price: Float!
+    attributes:[Attributes]
+}
+
+type Attributes{
+    attributeid:String!
+    name : String!
+    value: String!
+    searchable: Boolean
+    promotionable: Boolean
+    itemdefining: Boolean
+}
+
 input Cart{
     cartid : String!
     payments:[CartPayment]

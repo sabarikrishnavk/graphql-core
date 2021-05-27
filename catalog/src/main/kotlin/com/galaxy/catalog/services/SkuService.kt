@@ -30,9 +30,9 @@ class SkuService (val eventLogger: EventLogger){
          )
 
         return listOf(
-            Sku(skuid = "SKU1", name = "Stranger Things", price = 150, attributes = listOf(attributes1.get(0),attributes1.get(3), attributes2.get(0),attributes2.get(1) ) ),
-            Sku(skuid = "SKU2", name = " Things", price = 200, attributes = listOf(attributes1.get(1),attributes1.get(4), attributes2.get(0),attributes2.get(1) ) ),
-            Sku(skuid = "SKU3", name = "Stranger ", price = 25, attributes = listOf(attributes1.get(2),attributes1.get(5), attributes2.get(0),attributes2.get(1) ) )
+            Sku(skuid = "SKU1", name = "Stranger Things", price = 150.0, listprice= 150.0,discountprice = 150.0, attributes = listOf(attributes1.get(0),attributes1.get(3), attributes2.get(0),attributes2.get(1) ) ),
+            Sku(skuid = "SKU2", name = " Things", price = 200.0, listprice= 200.0,discountprice = 200.0, attributes = listOf(attributes1.get(1),attributes1.get(4), attributes2.get(0),attributes2.get(1) ) ),
+            Sku(skuid = "SKU3", name = "Stranger ", price = 25.0, listprice= 25.0,discountprice = 25.0, attributes = listOf(attributes1.get(2),attributes1.get(5), attributes2.get(0),attributes2.get(1) ) )
         )
     }
 }

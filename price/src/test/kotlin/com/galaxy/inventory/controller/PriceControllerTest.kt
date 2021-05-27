@@ -1,6 +1,7 @@
 
 package com.galaxy.price.controller
 
+import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.foundation.scalars.DateTimeScalarRegistration
 import com.galaxy.price.codegen.types.Price
 import com.galaxy.price.services.PriceService
@@ -19,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import java.time.OffsetDateTime
 
-@SpringBootTest(classes = [PriceController::class, DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
+@SpringBootTest(classes = [PriceController::class, EventLogger::class, DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
 class PriceControllerTest {
 
     @Autowired
@@ -34,10 +35,10 @@ class PriceControllerTest {
         `when`(priceService.price()).thenAnswer {
 
             listOf(
-                Price(skuid = "SKU1", location = "WH1", price = 25 , listprice = 25,priceId = "SKU1WH1V1"),
-                Price(skuid = "SKU1", location = "WH2", price = 20 , listprice = 25,priceId = "SKU1WH2V1"),
-                Price(skuid = "SKU2", location = "WH1", price = 50 , listprice = 50,priceId = "SKU2WH1V1"),
-                Price(skuid = "SKU2", location = "WH2", price = 55 , listprice = 50,priceId = "SKU2WH2V1")
+                Price(skuid = "SKU1", location = "STR1", price = 25.0 , wasprice = 25.0, listprice = 25.0,priceid = "SKU1WH1V1"),
+                Price(skuid = "SKU1", location = "STR2", price = 20.0 , wasprice = 25.0, listprice = 25.0,priceid = "SKU1WH2V1"),
+                Price(skuid = "SKU2", location = "STR1", price = 50.0 , wasprice = 25.0, listprice = 50.0,priceid = "SKU2WH1V1"),
+                Price(skuid = "SKU2", location = "STR2", price = 55.5 , wasprice = 25.0, listprice = 50.5,priceid = "SKU2WH2V1")
             )
         }
 
@@ -67,7 +68,7 @@ class PriceControllerTest {
         val result = dgsQueryExecutor.execute(
             """
             {
-              priceSkuLocation(skuid:"SKU1",location:"WH1"){
+              priceSkuLocation(skuid:"SKU1",location:"STR1"){
                 skuid
                 location
                 price
@@ -86,7 +87,7 @@ class PriceControllerTest {
             GraphQLQueryRequest(
                 com.galaxy.price.codegen.client.PriceSkuLocationGraphQLQuery.Builder()
                     .skuid("SKU1")
-                    .location("WH1")
+                    .location("STR1")
                     .build(),
                 com.galaxy.price.codegen.client.PriceSkuLocationProjectionRoot().price().location().skuid()
             )

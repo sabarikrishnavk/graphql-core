@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service
 class PriceService {
     fun price(): List<Price> {
         return listOf(
-            Price(skuid = "SKU1", location = "WH1", price = 25 , listprice = 25,priceId = "SKU1WH1V1"),
-            Price(skuid = "SKU1", location = "WH2", price = 20 , listprice = 25,priceId = "SKU1WH2V1"),
-            Price(skuid = "SKU2", location = "WH1", price = 50 , listprice = 50,priceId = "SKU2WH1V1"),
-            Price(skuid = "SKU2", location = "WH2", price = 55 , listprice = 50,priceId = "SKU2WH2V1")
+            Price(skuid = "SKU1", location = "STR1", price = 25.0 , wasprice = 25.0, listprice = 25.0,priceid = "SKU1WH1V1"),
+            Price(skuid = "SKU1", location = "STR2", price = 20.0 , wasprice = 25.0, listprice = 25.0,priceid = "SKU1WH2V1"),
+            Price(skuid = "SKU2", location = "STR1", price = 50.0 , wasprice = 25.0, listprice = 50.0,priceid = "SKU2WH1V1"),
+            Price(skuid = "SKU2", location = "STR2", price = 55.5 , wasprice = 25.0, listprice = 50.5,priceid = "SKU2WH2V1")
         )
     }
 }

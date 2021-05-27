@@ -24,7 +24,7 @@ class PEDiscount(
     var promotiondescription: String ,
     var discount: Double ,
     var percentage: Double,
-    var skuid: String? ,
+    var freesku: String? ,
     var shipmodemode: String?
 ){
     override fun toString(): String {

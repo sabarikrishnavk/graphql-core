@@ -1,20 +1,12 @@
 type Query {
     skus(skuids: [String]): [Sku]
 }
-
-#type Mutation {
-#    addReview(review: SubmittedReview): [Review]
-##    addArtwork(showId: Int!, upload: Upload!): [Image]! @skipcodegen
-#}
-
-#type Subscription {
-#    reviewAdded(skuId: Int!): Review
-#}
-
 type Sku @key(fields: "skuid"){
     skuid: String!
     name: String!
-    price: Int
+    price: Float!
+    listprice: Float!
+    discountprice: Float!
     querydate: DateTime
     shortdescription: String
     longdescription: String

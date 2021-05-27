@@ -3,7 +3,7 @@ type Query {
     priceBySku(skuid: String!  ): [Price]
 }
 type Mutation {
-    addPrice(inventory: SubmittedPrice): [Price]
+    addPrice(price: SubmittedPrice): [Price]
 }
 
 type Sku @key(fields: "skuid")  @extends {
@@ -12,21 +12,21 @@ type Sku @key(fields: "skuid")  @extends {
 }
 
 type Price {
-    priceId: String!
+    priceid: String!
     skuid: String!
     location: String!
     version: Int
-    price: Int
-    wasprice: Int
-    listprice: Int
+    price: Float!
+    wasprice: Float!
+    listprice: Float!
 }
 
 input SubmittedPrice {
-    priceId: String!
+    priceid: String!
     skuid: String!
     location: String!
     version: Int
-    price: Int
-    wasprice: Int
-    listprice: Int
+    price: Float!
+    wasprice: Float!
+    listprice: Float!
 }
