@@ -11,6 +11,7 @@ import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsMutation
 import com.netflix.graphql.dgs.context.DgsContext
 import graphql.schema.DataFetchingEnvironment
+import org.springframework.security.access.prepost.PreAuthorize
 
 
 @DgsComponent
@@ -19,6 +20,7 @@ class PromotionEngineController(private val promotionEngine: PromotionEngine ,
                                 val eventLogger: EventLogger){
 
     @DgsMutation
+    @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun evaluatePromotion( cart: Cart?, dfe: DataFetchingEnvironment?): ReturnCart? {
 
         val context= DgsContext.getCustomContext<CustomContext>(dfe!!);
