@@ -1,4 +1,4 @@
-package com.galaxy.promotion.config
+package com.galaxy.mdm.config
 
 import com.galaxy.foundation.jwt.config.JwtAuthenticationEntryPoint
 import com.galaxy.foundation.jwt.config.JwtRequestFilter
@@ -49,15 +49,13 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
-
 // We don't need CSRF for this example
-        httpSecurity.csrf().disable()// dont authenticate this particular request
+        httpSecurity.csrf().disable() // dont authenticate this particular request
             .authorizeRequests()
             .antMatchers("/graphiql").permitAll()
             .antMatchers("/actuator").permitAll()
             .antMatchers("/graphql").permitAll()
-            .anyRequest()
-            .authenticated()
+            .anyRequest ().permitAll()//authenticated()
             .and()
             .exceptionHandling()
             .authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
