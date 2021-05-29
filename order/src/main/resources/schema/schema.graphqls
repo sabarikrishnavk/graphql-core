@@ -1,0 +1,71 @@
+type Query {
+    findcart(cartid: String!  ):ReturnCart
+}
+
+
+type Sku @key(fields: "skuid")  @extends {
+    skuid: String! @external
+    price: Float!
+    attributes:[Attributes]
+}
+
+type Attributes{
+    attributeid:String!
+    name : String!
+    value: String!
+    searchable: Boolean
+    promotionable: Boolean
+    itemdefining: Boolean
+}
+
+input Cart{
+    cartid : String!
+    payments:[CartPayment]
+    items :[CartItem]!
+    totalprice :Float
+}
+input CartItem{
+    skuid : String!
+    quantity :Float!
+    shipmode: String
+}
+input CartPayment{
+    paymenttype : String!
+    price :Float!
+}
+
+type ReturnCart{
+    cartid : String!
+    totalskuprice :Float!
+    totaldiscount :Float!
+    totalshipping :Float!
+    total :Float!
+    items: [ReturnCartItem]
+    payments:[ReturnCartPayment]
+    discounts :[Discounts]
+}
+type ReturnCartItem{
+    skuid : String!
+    quantity :Float!
+    price :Float!
+    skuprice :Float!
+    discount :Float!
+    discounts :[Discounts]
+}
+type ReturnCartPayment{
+    skuid : String!
+    quantity :Float!
+    price :Float!
+    discounts :[Discounts]
+}
+type Discounts {
+    location: String!
+    promotionid: String!
+    discount : Float!
+    discounttype: DiscountType
+}
+enum DiscountType {
+    PERCENTAGE_OFF
+    AMOUNT_OFF
+    FIXED_AMOUNT
+}

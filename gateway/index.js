@@ -15,7 +15,8 @@ const gateway = new ApolloGateway({
       { name: "inventory", url: "http://localhost:8083/graphql" },
       { name: "price", url: "http://localhost:8084/graphql" },
       { name: "promotion", url: "http://localhost:8085/graphql" },
-      { name: "mdm", url: "http://localhost:8086/graphql" }
+      { name: "mdm", url: "http://localhost:8086/graphql" },
+      { name: "order", url: "http://localhost:8087/graphql" }
     ],
     buildService({ name, url }) {
        return new AuthenticatedDataSource({ url });
