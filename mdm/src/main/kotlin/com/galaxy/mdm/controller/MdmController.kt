@@ -4,6 +4,7 @@ import com.galaxy.foundation.context.CustomContext
 import com.galaxy.mdm.codegen.types.Location
 import com.galaxy.mdm.codegen.types.LocationAddress
 import com.galaxy.mdm.codegen.types.SaveLocation
+import com.galaxy.mdm.codegen.types.ShippingMethod
 import com.galaxy.mdm.services.MdmService
 import com.netflix.graphql.dgs.*
 import com.netflix.graphql.dgs.context.DgsContext
@@ -24,6 +25,12 @@ class MdmController(private val mdmService: MdmService ) {
         return mdmService.locations(locationids)
     }
 
+    @DgsQuery
+    @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
+    fun shippingmethods(@InputArgument shippingmethodids: List<String>): List<ShippingMethod> {
+
+        return mdmService.shippingmethods(shippingmethodids)
+    }
     @DgsData(parentType = "Query", field = "getStoreId")
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
     fun getStoreId(dfe: DataFetchingEnvironment?): String? {

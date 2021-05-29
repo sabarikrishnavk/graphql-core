@@ -1,6 +1,6 @@
 type Query {
     locations(locationids: [String]): [Location]
-    shipping(shipmethods:[String]): [ShippingMethod]
+    shippingmethods(shippingmethodids:[String]): [ShippingMethod]
 }
 type Mutation {
     savelocations(location: SaveLocation!): Location
@@ -28,6 +28,7 @@ type ShippingVia{
     shippingmethod: String!
     shippingcode: String!
     price: Float!
+    rank: Int!
 }
 
 type Location @key(fields: "locationid"){
