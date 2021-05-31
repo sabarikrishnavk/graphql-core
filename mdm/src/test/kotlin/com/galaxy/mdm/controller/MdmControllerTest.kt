@@ -50,7 +50,7 @@ class MdmControllerTest {
         )
 
 
-        `when`(mdmService.locations(Matchers.anyList())).thenAnswer {
+        `when`(mdmService.locations(anyList())).thenAnswer {
 
             listOf(
                 Location("STR1","Store 1","STR1", address.get(0),operationHrs)
@@ -67,7 +67,7 @@ class MdmControllerTest {
             {
                 locations (locationids:["STR1"]) {
                     name
-                    
+                    locationid
                 }
             }
         """.trimIndent(), "data.locations[*].locationid"
@@ -78,13 +78,14 @@ class MdmControllerTest {
 
     @Test
     fun locationsWithException() {
-        `when`(mdmService.locations(any())).thenThrow(RuntimeException("nothing to see here"))
+        `when`(mdmService.locations(anyList())).thenThrow(RuntimeException("nothing to see here"))
 
         val result = dgsQueryExecutor.execute(
             """
              {
                 locations (locationids:["STR1"]) {
                     name 
+                    locationid
                 }
             }
         """.trimIndent()
@@ -98,13 +99,13 @@ class MdmControllerTest {
     fun locationsWithQueryApi() {
         val graphQLQueryRequest =
             GraphQLQueryRequest(
-                com.galaxy.mdm.codegen.client.LocationsGraphQLQuery.Builder().build(),
-                com.galaxy.mdm.codegen.client.LocationsProjectionRoot().name()
+                com.galaxy.mdm.codegen.client.LocationsGraphQLQuery.Builder().locationids(locationids= listOf("STR1")).build(),
+                com.galaxy.mdm.codegen.client.LocationsProjectionRoot().name().locationcode().locationid()
             )
-        val titles = dgsQueryExecutor.executeAndExtractJsonPath<List<String>>(
+        val locationids = dgsQueryExecutor.executeAndExtractJsonPath<List<String>>(
             graphQLQueryRequest.serialize(),
             "data.locations[*].locationid"
         )
-        assertThat(titles[0]).contains("STR1")
+        assertThat(locationids[0]).contains("STR1")
     }
 }

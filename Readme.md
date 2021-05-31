@@ -58,25 +58,71 @@ Sample commands in redis-cli
 Docker build
 ---
 
-Catalog API:
+Make sure Docket is running on the machine
+
+
 
 Generate graphql java file
 
-> gradle catalog:generateJava
-
-> gradle catalog:dockerBuildImage
-
-> docker run -d -p 8081:8081 --name galaxy-catalog-docker galaxy-catalog:latest
-
-
+> gradle schema-registry:generateSchemas
+ 
 Auth API
-
-Generate 
-> gradle auth:generateJava
+ 
+> gradle auth:build
  
 > gradle auth:dockerBuildImage
 
-> docker run -d -p 8082:8082 --name galaxy-catalog-docker galaxy-catalog:latest
+> docker run -d -p 8081:8081 --name galaxy-auth-docker galaxy-auth:latest
 
+
+MDM API:
+
+> gradle mdm:build
+
+> gradle mdm:dockerBuildImage
+
+> docker run -d -p 8082:8082 --name galaxy-mdm-docker galaxy-mdm:latest
+
+Catalog API:
+
+> gradle catalog:build
+
+> gradle catalog:dockerBuildImage
+
+> docker run -d -p 8083:8083 --name galaxy-catalog-docker galaxy-catalog:latest
+
+Inventory API:
+
+> gradle inventory:build
+
+> gradle inventory:dockerBuildImage
+
+> docker run -d -p 8084:8084 --name galaxy-inventory-docker galaxy-inventory:latest
+
+Price API:
+
+> gradle price:build
+
+> gradle price:dockerBuildImage
+
+> docker run -d -p 8085:8085 --name galaxy-price-docker galaxy-price:latest
+
+Promotion API:
+
+> gradle promotion:build
+
+> gradle promotion:dockerBuildImage
+
+> docker run -d -p 8086:8086 --name galaxy-promotion-docker galaxy-promotion:latest
+
+
+
+Order API:
+
+> gradle order:build
+
+> gradle order:dockerBuildImage
+
+> docker run -d -p 8087:8087 --name galaxy-order-docker galaxy-order:latest
 
 

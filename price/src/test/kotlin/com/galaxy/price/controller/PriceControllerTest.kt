@@ -13,6 +13,7 @@ import graphql.ExecutionResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,7 +33,7 @@ class PriceControllerTest {
 
     @BeforeEach
     fun before() {
-        `when`(priceService.price()).thenAnswer {
+        `when`(priceService.price(Mockito.anyList(), Mockito.anyString())).thenAnswer {
 
             listOf(
                 Price(skuid = "SKU1", location = "STR1", price = 25.0 , wasprice = 25.0, listprice = 25.0,priceid = "SKU1WH1V1"),
@@ -46,29 +47,29 @@ class PriceControllerTest {
 
     @Test
     fun price() {
-        val price: List<Integer> = dgsQueryExecutor.executeAndExtractJsonPath(
+        val price: List<Double> = dgsQueryExecutor.executeAndExtractJsonPath(
             """
             {
-              priceSkuLocation(skuid:"SKU1",location:"WH1"){
+              priceSkusLocation(skuids:["SKU1"],location:"STR1"){
                 skuid
                 location
                 price
               }
             }
-        """.trimIndent(), "data.priceSkuLocation[*].price"
+        """.trimIndent(), "data.priceSkusLocation[*].price"
         )
 
-        assertThat(price[0]).isEqualTo(25)
+        assertThat(price[0]).isEqualTo(25.0)
     }
 
     @Test
-    fun showsWithException() {
-        `when`(priceService.price()).thenThrow(RuntimeException("nothing to see here"))
+    fun priceWithException() {
+        `when`(priceService.price(Mockito.anyList(), Mockito.anyString())).thenThrow(RuntimeException("nothing to see here"))
 
         val result = dgsQueryExecutor.execute(
             """
             {
-              priceSkuLocation(skuid:"SKU1",location:"STR1"){
+              priceSkusLocation(skuids:["SKU1"],location:"STR1"){
                 skuid
                 location
                 price
@@ -82,19 +83,19 @@ class PriceControllerTest {
     }
 
     @Test
-    fun inventoryWithQueryApi() {
+    fun priceWithQueryApi() {
         val graphQLQueryRequest =
             GraphQLQueryRequest(
-                com.galaxy.price.codegen.client.PriceSkuLocationGraphQLQuery.Builder()
-                    .skuid("SKU1")
+                com.galaxy.price.codegen.client.PriceSkusLocationGraphQLQuery.Builder()
+                    .skuids(listOf("SKU1"))
                     .location("STR1")
                     .build(),
-                com.galaxy.price.codegen.client.PriceSkuLocationProjectionRoot().price().location().skuid()
+                com.galaxy.price.codegen.client.PriceSkusLocationProjectionRoot().price().location().skuid()
             )
-        val price = dgsQueryExecutor.executeAndExtractJsonPath<List<Integer>>(
+        val price = dgsQueryExecutor.executeAndExtractJsonPath<List<Double>>(
             graphQLQueryRequest.serialize(),
-            "data.priceSkuLocation[*].price"
+            "data.priceSkusLocation[*].price"
         )
-        assertThat(price[0]).isEqualTo(25)
+        assertThat(price[0]).isEqualTo(25.0)
     }
 }

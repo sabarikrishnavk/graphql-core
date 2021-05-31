@@ -1,6 +1,7 @@
 
 type Discounts {
     location: String!
+    skuid: String
     promotionid: String!
     discount : Float!
     discounttype: DiscountType

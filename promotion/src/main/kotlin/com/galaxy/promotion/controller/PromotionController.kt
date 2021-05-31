@@ -18,13 +18,14 @@ class PromotionController(private val discountService: DiscountService , val eve
 
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
-    fun discountSkuLocation(@InputArgument skuid : String,@InputArgument location : String): List<Discounts> {
-        eventLogger.log( PromotionEventType.PROMO_FIND, "discountSkuLocation", skuid,location)
-        return discountService.discountBySkuLocation(skuid ,location)
+    fun discountSkusLocation(@InputArgument skuids : List<String>,@InputArgument location : String): List<Discounts> {
+        eventLogger.log( PromotionEventType.PROMO_FIND, "discountSkusLocation", skuids,location)
+        return discountService.discounts(skuids ,location)
     }
     @DgsQuery
     @PreAuthorize("hasAnyRole('ROLE_REGISTERED','ROLE_GUEST')")
-    fun discountBySku(@InputArgument skuid : String ): List<Discounts> {
-        return  discountService.discountBySku(skuid)
+    fun discountBySkus(@InputArgument skuids : List<String>): List<Discounts> {
+        eventLogger.log( PromotionEventType.PROMO_FIND, "discountBySkus", skuids)
+        return  discountService.discounts(skuids)
     }
 }

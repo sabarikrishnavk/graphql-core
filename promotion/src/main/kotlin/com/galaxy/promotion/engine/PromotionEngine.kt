@@ -16,7 +16,7 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
 
         var results= mutableListOf<ReturnCartItem>()
         for (request in requestList) {
-            var discounts = fireRules(request)
+            var discounts = fireRules(request,request.skuid)
 
             var totaldiscount = 0.0
             discounts?.forEach {
@@ -31,10 +31,10 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
     }
 
     fun evaluateOrderRequest(request: PEOrderRequest): MutableList<Discounts?> {
-        return fireRules(request)
+        return fireRules(request,null)
     }
 
-    private fun fireRules(request: PERequest): MutableList<Discounts?> {
+    private fun fireRules(request: PERequest,skuid: String?): MutableList<Discounts?> {
         var discounts = mutableListOf<Discounts?>()
 
         val result = PEResult()
@@ -46,7 +46,7 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
         kieSession.dispose()
 
         result.discounts.forEach {
-            discounts.add(Discounts(request.location!! , it.promotionid , it.discount, DiscountType.FIXED_AMOUNT ) )
+            discounts.add(Discounts(request.location!! ,skuid, it.promotionid , it.discount, DiscountType.FIXED_AMOUNT ) )
         }
         return discounts
     }

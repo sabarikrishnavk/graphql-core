@@ -3,6 +3,8 @@ package com.galaxy.promotion.controller
 
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.foundation.scalars.DateTimeScalarRegistration
+import com.galaxy.promotion.codegen.types.DiscountType
+import com.galaxy.promotion.codegen.types.Discounts
 import com.galaxy.promotion.services.DiscountService
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
@@ -10,8 +12,8 @@ import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.any
+import org.mockito.Mockito
+import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -28,89 +30,48 @@ class PromotionControllerTest {
 
     @BeforeEach
     fun before() {
-//        `when`(discountService.discounts()).thenAnswer {
-//
-//             listOf(
-//                Discounts(priceid = "SKU1WH1V1" , skuid = "SKU1", location = "WH1", price =
-//                25.0 , discountdtl = listOf(
-//                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
-//                )),
-//                Discounts(priceid = "SKU1WH2V1" , skuid = "SKU1", location = "WH2", price = 25.0 , discountdtl = listOf(
-//                    DiscountDetail(type= DiscountType.PERCENTAGE_OFF,percentage = 25.0)
-//                )),
-//                Discounts(priceid = "SKU2WH1V1" , skuid = "SKU2", location = "WH1", price = 25.0 , discountdtl = listOf(
-//                    DiscountDetail(type= DiscountType.AMOUNT_OFF,amountoff = 5.0)
-//                )),
-//                Discounts(priceid = "SKU2WH2V1" , skuid = "SKU2", location = "WH2", price = 25.0 , discountdtl = listOf(
-//                    DiscountDetail(type= DiscountType.FIXED_AMOUNT,amountoff = 20.0)
-//                )),
-//            )
-//        }
+        `when`(discountService.discounts(Mockito.anyList(), Mockito.anyString())).thenAnswer {
+
+             listOf(
+                Discounts(  promotionid =  "PROMOID11" ,skuid = "SKU1", location = "STR1", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
+                Discounts(  promotionid =  "PROMOID12" ,skuid = "SKU2", location = "STR1", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
+                Discounts(  promotionid =  "PROMOID21" ,skuid = "SKU1", location = "STR2", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
+                Discounts(  promotionid =  "PROMOID22" ,skuid = "SKU2", location = "STR2", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF)
+
+            )
+        }
 
     }
 
     @Test
     fun discounts() {
-        val price: List<Integer> = dgsQueryExecutor.executeAndExtractJsonPath(
-            """{
-              discountSkuLocation(skuid:"SKU1",location:"WH1"){
+        val price: List<Double> = dgsQueryExecutor.executeAndExtractJsonPath(
+            """
+            {
+              discountSkusLocation(skuids:["SKU1"],location:"WH1"){
                 skuid
                 location
-                price
-                discountdtl{
-                    type
-                    percentage
-                    fixed
-                    amountoff
-                }
-              }
-              discountBySku(skuid: "SKU1"){
-                skuid
-                location
-                price
-                discountdtl{
-                    type
-                    percentage
-                    fixed
-                    amountoff
-                }
-              }
+                discount 
+              } 
             }
-        """.trimIndent(), "data.discountSkuLocation[*].price"
+        """.trimIndent(), "data.discountSkusLocation[*].discount"
         )
 
         assertThat(price[0]).isEqualTo(25.0)
     }
 
     @Test
-    fun showsWithException() {
-        `when`(discountService.discountBySku(any())).thenThrow(RuntimeException("nothing to see here"))
+    fun discountsWithException() {
+        `when`(discountService.discounts(Mockito.anyList(), Mockito.anyString())).thenThrow(RuntimeException("nothing to see here"))
 
         val result = dgsQueryExecutor.execute(
             """
             {
-              discountSkuLocation(skuid:"SKU1",location:"WH1"){
+              discountSkusLocation(skuids:["SKU1"],location:"STR1"){
                 skuid
                 location
-                price
-                discountdtl{
-                    type
-                    percentage
-                    fixed
-                    amountoff
-                }
-              }
-              discountBySku(skuid: "SKU1"){
-                skuid
-                location
-                price
-                discountdtl{
-                    type
-                    percentage
-                    fixed
-                    amountoff
-                }
-              }
+                discount 
+              } 
             }
         """.trimIndent()
         )
@@ -123,16 +84,16 @@ class PromotionControllerTest {
     fun discountsWithQueryApi() {
         val graphQLQueryRequest =
             GraphQLQueryRequest(
-                com.galaxy.promotion.codegen.client.DiscountSkuLocationGraphQLQuery.Builder()
-                    .skuid("SKU1")
-                    .location("WH1")
+                com.galaxy.promotion.codegen.client.DiscountSkusLocationGraphQLQuery.Builder()
+                    .skuids(listOf("SKU1"))
+                    .location("STR1")
                     .build(),
-                com.galaxy.promotion.codegen.client.DiscountSkuLocationProjectionRoot().discount()
+                com.galaxy.promotion.codegen.client.DiscountSkusLocationProjectionRoot().discount()
             )
-        val amountoff = dgsQueryExecutor.executeAndExtractJsonPath<List<Integer>>(
+        val amountoff = dgsQueryExecutor.executeAndExtractJsonPath<List<Double>>(
             graphQLQueryRequest.serialize(),
-            "data.discountSkuLocation[*].discountdtl[*].amountoff"
+            "data.discountSkusLocation[*].discount"
         )
-        assertThat(amountoff[0]).isEqualTo(5.0)
+        assertThat(amountoff[0]).isEqualTo(25.0)
     }
 }

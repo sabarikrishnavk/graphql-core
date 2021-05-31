@@ -1,23 +1,21 @@
-
 package com.galaxy.inventory.controller
 
 import com.galaxy.foundation.scalars.DateTimeScalarRegistration
+import com.galaxy.inventory.codegen.client.InventorySkusLocationGraphQLQuery
+import com.galaxy.inventory.codegen.client.InventorySkusLocationProjectionRoot
 import com.galaxy.inventory.codegen.types.Inventory
 import com.galaxy.inventory.services.InventoryService
-import com.jayway.jsonpath.TypeRef
+import com.galaxy.price.controller.InventoryController
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
 import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest
-import graphql.ExecutionResult
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import java.time.OffsetDateTime
 
 @SpringBootTest(classes = [InventoryController::class, DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
 class InventoryControllerTest {
@@ -31,12 +29,13 @@ class InventoryControllerTest {
 
     @BeforeEach
     fun before() {
-        `when`(inventoryService.inventory()).thenAnswer {
+        Mockito.`when`(inventoryService.inventory(Mockito.anyList(), Mockito.anyString())).thenAnswer {
 
             listOf(
-                Inventory(skuid = "SKU1", location = "WH1", totalQty = 25),
-                Inventory(skuid = "SKU2", location = "WH1", totalQty = 10),
-                Inventory(skuid = "SKU2", location = "WH2", totalQty = 5)
+                Inventory(skuid = "SKU1", location = "STR1", totalQty = 25),
+                Inventory(skuid = "SKU1", location = "STR2", totalQty = 100),
+                Inventory(skuid = "SKU2", location = "STR1", totalQty = 10),
+                Inventory(skuid = "SKU2", location = "STR2", totalQty = 5)
             )
         }
 
@@ -44,29 +43,29 @@ class InventoryControllerTest {
 
     @Test
     fun inventory() {
-        val quantity: List<Integer> = dgsQueryExecutor.executeAndExtractJsonPath(
+        val totalQty: List<Int> = dgsQueryExecutor.executeAndExtractJsonPath(
             """
             {
-              inventorySkuLocation(skuid:"SKU",location:"WH1"){
+              inventorySkusLocation(skuids:["SKU1"],location:"STR1"){
                skuid
                location
                totalQty
               }
             }
-        """.trimIndent(), "data.inventorySkuLocation[*].totalQty"
+        """.trimIndent(), "data.inventorySkusLocation[*].totalQty"
         )
 
-        assertThat(quantity[0]).isEqualTo(25)
+        Assertions.assertThat(totalQty[0]).isEqualTo(25)
     }
 
     @Test
-    fun showsWithException() {
-        `when`(inventoryService.inventory()).thenThrow(RuntimeException("nothing to see here"))
+    fun inventoryWithException() {
+        Mockito.`when`(inventoryService.inventory(Mockito.anyList(), Mockito.anyString())).thenThrow(RuntimeException("nothing to see here"))
 
         val result = dgsQueryExecutor.execute(
             """
             {
-              inventorySkuLocation(skuid:"SKU",location:"WH1"){
+              inventorySkusLocation(skuids:["SKU"],location:"WH1"){
                skuid
                location
                totalQty
@@ -75,24 +74,24 @@ class InventoryControllerTest {
         """.trimIndent()
         )
 
-        assertThat(result.errors).isNotEmpty
-        assertThat(result.errors[0].message).isEqualTo("java.lang.RuntimeException: nothing to see here")
+        Assertions.assertThat(result.errors).isNotEmpty
+        Assertions.assertThat(result.errors[0].message).isEqualTo("java.lang.RuntimeException: nothing to see here")
     }
 
     @Test
     fun inventoryWithQueryApi() {
         val graphQLQueryRequest =
             GraphQLQueryRequest(
-                com.galaxy.inventory.codegen.client.InventorySkuLocationGraphQLQuery.Builder()
-                    .skuid("SKU1")
-                    .location("WH1")
+                InventorySkusLocationGraphQLQuery.Builder()
+                    .skuids(listOf("SKU1"))
+                    .location("STR1")
                     .build(),
-                com.galaxy.inventory.codegen.client.InventorySkuLocationProjectionRoot().totalQty().location().skuid()
+                InventorySkusLocationProjectionRoot().totalQty().location().skuid()
             )
-        val quantity = dgsQueryExecutor.executeAndExtractJsonPath<List<Integer>>(
+        val quantity = dgsQueryExecutor.executeAndExtractJsonPath<List<Int>>(
             graphQLQueryRequest.serialize(),
-            "data.inventorySkuLocation[*].totalQty"
+            "data.inventorySkusLocation[*].totalQty"
         )
-        assertThat(quantity[0]).isEqualTo(25)
+        Assertions.assertThat(quantity[0]).isEqualTo(25)
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate
 
 @SpringBootTest(classes = [CatalogService::class, EventLogger::class,RestTemplate::class])
 @EnableConfigurationProperties(UrlProperties::class)
-@TestPropertySource("classpath:application.properties")
+@TestPropertySource("classpath:application.yaml")
 class CatalogServiceTest {
     @Autowired
     lateinit var  eventLogger: EventLogger
@@ -28,7 +28,7 @@ class CatalogServiceTest {
     fun evalulateSkuRequest() {
         val skuids = listOf<String>("SKU1","SKU2")
         val context = CustomContext()
-        context.bearerToken ="Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJHYWxheHkiLCJzdWIiOiJ0ZXN0dXNlciIsIm5hbWUiOiJ0ZXN0dXNlciIsInVzZXJJZCI6ImY2OTE1NjJkLWY2ZDMtNDE4Zi1hMWMzLTJiNTFjYTI4NTRjNCIsInJvbGUiOiJSRUdJU1RFUkVEIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjIxNDU2NTY1LCJleHAiOjE2MjIwNjEzNjV9.gZqZATF-Y33EJxPMyAxkkewGyVdAtXR3P9ON2xOLE5VD5Q4iCms-oFqVEoo2LZ3vkTwF67ELP9O9t4pjmVn79w"
+        context.bearerToken ="Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJHYWxheHkiLCJzdWIiOiJ0ZXN0dXNlciIsIm5hbWUiOiJ0ZXN0dXNlciIsInVzZXJJZCI6ImM0NmM3OTA0LTJmZjMtNDYyOC1iZmRlLWI1YjlmMjExNTc2YSIsInJvbGUiOiJSRUdJU1RFUkVEIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwibG9jYXRpb24iOiJTVFIxIiwiaWF0IjoxNjIyNDgwOTA5LCJleHAiOjE2MjMwODU3MDl9.p183U8byDw8JX-mCbvqdJO66TXJWet4kf0WGkTu2PsbzfC5mH7VeTGB3YkLWzw-Yx8sxla7JguX29FmfhutKKQ"
         val skuMap= catalogService.getSkuDetails(skuids,context)
         for (sku in skuMap!!){
             println(sku)
