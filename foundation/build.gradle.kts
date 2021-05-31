@@ -14,7 +14,6 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
 
-    id("com.netflix.dgs.codegen")
 }
 
 group = "com.galaxy"
@@ -25,7 +24,6 @@ repositories {
     mavenCentral()
 }
 dependencies {
-
     api(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
     api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
     api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer")
@@ -58,9 +56,7 @@ tasks.bootJar{
 tasks.jar{
     enabled = true
 }
-tasks.generateJava{
-    enabled = false
-}
+
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {

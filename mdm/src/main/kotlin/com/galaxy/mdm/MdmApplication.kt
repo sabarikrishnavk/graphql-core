@@ -1,5 +1,5 @@
 
-package com.galaxy.catalog
+package com.galaxy.mdm
 
 import com.galaxy.foundation.jwt.JwtProperties
 import graphql.execution.instrumentation.Instrumentation
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan
 @SpringBootApplication//(exclude = arrayOf(SecurityAutoConfiguration::class))
 @ComponentScan("com.galaxy.foundation","com.galaxy.mdm")
 @EnableConfigurationProperties(JwtProperties::class)
-class CatalogApplication {
+class MdmApplication {
 	@Bean
 	@ConditionalOnProperty(prefix = "graphql.tracing", name = ["enabled"], matchIfMissing = true)
 	open fun tracingInstrumentation(): Instrumentation? {
@@ -23,5 +23,5 @@ class CatalogApplication {
 	}
 }
 fun main(args: Array<String>) {
-	runApplication<CatalogApplication>(*args)
+	runApplication<MdmApplication>(*args)
 }

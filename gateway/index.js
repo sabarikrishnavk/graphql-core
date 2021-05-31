@@ -11,11 +11,11 @@ const gateway = new ApolloGateway({
     debug: true,
     serviceList: [
       { name: "auth", url: "http://localhost:8081/graphql" },
-      { name: "catalog", url: "http://localhost:8082/graphql" },
-      { name: "inventory", url: "http://localhost:8083/graphql" },
-      { name: "price", url: "http://localhost:8084/graphql" },
-      { name: "promotion", url: "http://localhost:8085/graphql" },
-      { name: "mdm", url: "http://localhost:8086/graphql" },
+      { name: "mdm", url: "http://localhost:8082/graphql" },
+      { name: "catalog", url: "http://localhost:8083/graphql" },
+      { name: "inventory", url: "http://localhost:8084/graphql" },
+      { name: "price", url: "http://localhost:8085/graphql" },
+      { name: "promotion", url: "http://localhost:8086/graphql" },
       { name: "order", url: "http://localhost:8087/graphql" }
     ],
     buildService({ name, url }) {

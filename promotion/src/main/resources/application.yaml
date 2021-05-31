@@ -1,0 +1,20 @@
+server:
+  port: 8086
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+jwt:
+  secretkey: GALAXY1456KEYROCKSSUPERMARIO123KEYS789HELPSALOTGALAXY1456KEYROCKSSUPERMARIO123KEYS789HELPSALOT
+
+galaxy:
+  url:
+    catalog: http://localhost:8083/graphql
+
+dgs:
+  graphql:
+    schema-locations:
+      - classpath*:**/promotion-schema.graphql*
+
+

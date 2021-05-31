@@ -4,8 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
-    kotlin("jvm")
-    id("com.netflix.dgs.codegen")
+    kotlin("jvm") 
     kotlin("plugin.spring")
     java
     id("com.bmuschko.docker-spring-boot-application") version "6.7.0"
@@ -26,13 +25,8 @@ configurations {
 }
 dependencies {
     api(project(":foundation"))
+    api(project(":schema-registry"))
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
-//    schemaPaths= mutableListOf<Any>("${rootDir}/schema/catalog")
-    generateClient = true
-    packageName = "com.galaxy.mdm.codegen"
 }
 
 tasks.withType<KotlinCompile> {
@@ -49,7 +43,7 @@ tasks.withType<Test> {
 docker {
     springBootApplication {
         baseImage.set("openjdk:11-jdk-slim")
-        ports.set(listOf(8086))
+        ports.set(listOf(8082))
         images.set(setOf("galaxy-mdm:1.0", "galaxy-mdm:latest"))
         jvmArgs.set(listOf("-Dspring.profiles.active=production", "-Xmx2048m"))
     }

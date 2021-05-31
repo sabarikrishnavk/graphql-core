@@ -1,0 +1,193 @@
+
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask
+import org.jetbrains.kotlin.utils.keysToMap
+
+plugins {
+    id("org.springframework.boot")
+    id("io.spring.dependency-management")
+    kotlin("jvm")
+    id("com.netflix.dgs.codegen")
+    kotlin("plugin.spring")
+    java
+    id("com.bmuschko.docker-spring-boot-application") version "6.7.0"
+}
+
+group = "com.galaxy"
+version = "0.0.1"
+java.sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    all {
+        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
+    }
+}
+dependencies {
+    api(project(":foundation"))
+
+    api("com.netflix.graphql.dgs.codegen:graphql-dgs-codegen-gradle:4.6.4")
+    api("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.31")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+
+tasks.bootJar{
+    enabled = false
+}
+tasks.jar{
+    enabled = true
+}
+tasks.generateJava{
+    enabled = false
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "11"
+    }
+}
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+val projectList = mutableListOf<String>("auth","mdm","catalog","inventory","price","promotion","order")
+
+tasks.withType<GenerateFilesTask> {
+//    schemaFiles= mutableListOf<String>(
+//        "catalog-schema.graphqls",
+//        "inventory-schema.graphqls",
+//        "price-schema.graphqls")
+//    packageNames = mutableListOf<String>(
+//        "com.galaxy.catalog.codegen",
+//        "com.galaxy.inventory.codegen",
+//        "com.galaxy.price.codegen")
+
+    projects = projectList
+    generateClient = true
+    generateDataTypes = true
+    generateInterfaces = false
+}
+tasks.register<GenerateFilesTask>("generateSchemas")
+
+sourceSets {
+    main {
+        java {
+            projectList.forEach {
+                srcDir("build/$it")
+            }
+        }
+    }
+}
+
+open class GenerateFilesTask  @javax.inject.Inject constructor()  : DefaultTask() {
+
+
+    private val LOGGER = org.slf4j.LoggerFactory.getLogger("DgsCodegenPlugin")
+
+    @Input
+    var generatedSourcesDir: String = project.buildDir.absolutePath
+
+    @Input
+    var schemaFiles = mutableListOf<String>()
+
+
+    @Input
+    var packageNames = mutableListOf<String>()
+
+    @Input
+    var projects = mutableListOf<String>("project")
+
+
+    @Input
+    var subPackageNameClient = "client"
+
+    @Input
+    var subPackageNameDatafetchers = "datafetchers"
+
+    @Input
+    var subPackageNameTypes = "types"
+
+
+    @Input
+    var typeMapping = mutableMapOf<String, String>()
+
+    @Input
+    var generateBoxedTypes = false
+
+    @Input
+    var generateClient = false
+
+    @Input
+    var generateDataTypes = true
+
+    @Input
+    var generateInterfaces = false
+
+    @OutputDirectory
+    fun getExampleOutputDir(): File {
+        return File("$generatedSourcesDir/generated-examples")
+    }
+
+    @Input
+    var includeQueries = mutableListOf<String>()
+
+    @Input
+    var includeMutations = mutableListOf<String>()
+
+    @Input
+    var skipEntityQueries = false
+
+    @Input
+    var shortProjectionNames = false
+
+    @Input
+    var omitNullInputFields = false
+
+    @Input
+    var maxProjectionDepth = 10
+
+    @TaskAction
+    fun generate() {
+
+        for (projectName in projects){
+
+            val packageName = "com.galaxy.$projectName.codegen"
+            val schemaFilePath ="${project.projectDir}/src/main/resources/schema/$projectName-schema.graphqls"
+
+            println("Generate ---$schemaFilePath")
+
+            val config = com.netflix.graphql.dgs.codegen.CodeGenConfig(
+                schemas = emptySet(),
+                schemaFiles = setOf(File("$schemaFilePath")),
+                packageName = packageName,
+                outputDir = File("$generatedSourcesDir/$projectName").toPath(),
+                examplesOutputDir = getExampleOutputDir().toPath(),
+                writeToFiles = true,
+                subPackageNameClient = subPackageNameClient,
+                subPackageNameDatafetchers = subPackageNameDatafetchers,
+                subPackageNameTypes = subPackageNameTypes,
+                language = com.netflix.graphql.dgs.codegen.Language.KOTLIN,
+                generateBoxedTypes = generateBoxedTypes,
+                generateClientApi = generateClient,
+                generateInterfaces = generateInterfaces,
+                typeMapping = typeMapping,
+                includeQueries = includeQueries.toSet(),
+                includeMutations = includeMutations.toSet(),
+                skipEntityQueries = skipEntityQueries,
+                shortProjectionNames = shortProjectionNames,
+                generateDataTypes = generateDataTypes,
+                omitNullInputFields = omitNullInputFields,
+                maxProjectionDepth = maxProjectionDepth,
+            )
+//            println("Codegen config:"+ config)
+            val codegen = com.netflix.graphql.dgs.codegen.CodeGen(config)
+            codegen.generate()
+        }
+    }
+}

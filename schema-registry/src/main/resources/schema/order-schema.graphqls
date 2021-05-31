@@ -1,5 +1,8 @@
 type Query {
     findcart(cartid: String!  ):ReturnCart
+    additem(skuid:String! , quantity:Int!, fulfillment:String!) : ReturnCart
+    updateitem(cartitemid:String! , quantity:Int!, shipmode:String!, addressid: String!) : ReturnCart
+    cartpayment(cartId:String!, paymentid:String! ) : ReturnCart
 }
 
 
@@ -24,12 +27,17 @@ input Cart{
     items :[CartItem]!
     totalprice :Float
 }
+input CartAddress{
+    address1: String!
+
+}
 input CartItem{
     skuid : String!
     quantity :Float!
     shipmode: String
 }
 input CartPayment{
+    paymentid: String!
     paymenttype : String!
     price :Float!
 }
@@ -45,6 +53,7 @@ type ReturnCart{
     discounts :[Discounts]
 }
 type ReturnCartItem{
+    cartitemid:String!
     skuid : String!
     quantity :Float!
     price :Float!
