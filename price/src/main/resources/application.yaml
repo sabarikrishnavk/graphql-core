@@ -11,6 +11,6 @@ jwt:
 dgs:
   graphql:
     schema-locations:
-      - classpath*:**/price-schema.graphql*
+      - classpath*:**/price/price-schema.graphql*
 
 

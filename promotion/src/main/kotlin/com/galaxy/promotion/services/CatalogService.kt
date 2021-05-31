@@ -2,7 +2,7 @@ package com.galaxy.promotion.services
 
 import com.galaxy.foundation.constants.HEADER_AUTH
 import com.galaxy.foundation.context.CustomContext
-import com.galaxy.promotion.codegen.types.Sku
+import com.galaxy.catalog.codegen.types.Sku
 import com.galaxy.promotion.util.UrlProperties
 import com.jayway.jsonpath.TypeRef
 import com.netflix.graphql.dgs.client.DefaultGraphQLClient
@@ -38,6 +38,7 @@ class CatalogService (val restTemplate: RestTemplate , val urlProperties: UrlPro
         val QUERY = "query skuQuery{\n" +
                 "  skus(skuids: \"\$SKUIDS\" ){\n" +
                 "    skuid\n" +
+                "    name\n" +
                 "    price\n" +
                 "    attributes{\n" +
                 "        attributeid\n" +

@@ -11,6 +11,6 @@ jwt:
 dgs:
   graphql:
     schema-locations:
-      - classpath*:**/auth-schema.graphql*
+      - classpath*:**/auth/auth-schema.graphql*
 
 

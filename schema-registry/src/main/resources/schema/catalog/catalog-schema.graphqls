@@ -14,14 +14,7 @@ type Sku @key(fields: "skuid"){
     attributes:[Attributes]
 }
 
-type Attributes{
-    attributeid:String!
-    name : String!
-    value: String!
-    searchable: Boolean
-    promotionable: Boolean
-    itemdefining: Boolean
-}
+
 #
 #type Review {
 #    userId: String

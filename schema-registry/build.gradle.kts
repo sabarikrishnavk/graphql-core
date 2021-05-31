@@ -68,6 +68,12 @@ tasks.withType<GenerateFilesTask> {
 //        "com.galaxy.inventory.codegen",
 //        "com.galaxy.price.codegen")
 
+    val catalog = arrayListOf<String>("attributes")
+    val order = arrayListOf<String>("cart","discounts")
+    val promotion = arrayListOf<String>("cart","discounts")
+
+    dependencies=mapOf(Pair("catalog",catalog),Pair("order",order),Pair("promotion",promotion))
+
     projects = projectList
     generateClient = true
     generateDataTypes = true
@@ -93,6 +99,8 @@ open class GenerateFilesTask  @javax.inject.Inject constructor()  : DefaultTask(
     @Input
     var generatedSourcesDir: String = project.buildDir.absolutePath
 
+    @Input
+    var  dependencies = mapOf<String,ArrayList<String>>()
     @Input
     var schemaFiles = mutableListOf<String>()
 
@@ -158,13 +166,24 @@ open class GenerateFilesTask  @javax.inject.Inject constructor()  : DefaultTask(
         for (projectName in projects){
 
             val packageName = "com.galaxy.$projectName.codegen"
-            val schemaFilePath ="${project.projectDir}/src/main/resources/schema/$projectName-schema.graphqls"
+            var schemaFilePath ="${project.projectDir}/src/main/resources/schema/$projectName/"
 
-            println("Generate ---$schemaFilePath")
+            var schemaFileset = HashSet<File>()
+            schemaFileset.add(File("$schemaFilePath"))
+
+            if(dependencies.get(projectName) !=null){
+                dependencies.get(projectName)?.forEach {
+                    val commonSchemaFilePath ="${project.projectDir}/src/main/resources/schema/common/$it-schema.graphqls"
+                    schemaFileset.add(File("$commonSchemaFilePath"))
+                }
+            }
+
+            println("Generate ---$schemaFileset")
+
 
             val config = com.netflix.graphql.dgs.codegen.CodeGenConfig(
                 schemas = emptySet(),
-                schemaFiles = setOf(File("$schemaFilePath")),
+                schemaFiles = schemaFileset,
                 packageName = packageName,
                 outputDir = File("$generatedSourcesDir/$projectName").toPath(),
                 examplesOutputDir = getExampleOutputDir().toPath(),

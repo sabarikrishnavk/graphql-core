@@ -1,0 +1,12 @@
+
+type Discounts {
+    location: String!
+    promotionid: String!
+    discount : Float!
+    discounttype: DiscountType
+}
+enum DiscountType {
+    PERCENTAGE_OFF
+    AMOUNT_OFF
+    FIXED_AMOUNT
+}

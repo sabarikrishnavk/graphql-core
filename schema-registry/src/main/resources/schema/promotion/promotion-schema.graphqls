@@ -1,0 +1,7 @@
+type Query {
+    discountSkuLocation(skuid: String!, location: String! ): [Discounts]
+    discountBySku(skuid: String!  ): [Discounts]
+}
+type Mutation {
+    evaluatePromotion(cart: Cart!): ReturnCart
+}

@@ -11,6 +11,6 @@ jwt:
 dgs:
   graphql:
     schema-locations:
-      - classpath*:**/mdm-schema.graphql*
+      - classpath*:**/mdm/mdm-schema.graphql*
 
 

@@ -11,6 +11,6 @@ jwt:
 dgs:
   graphql:
     schema-locations:
-      - classpath*:**/inventory-schema.graphql*
+      - classpath*:**/inventory/inventory-schema.graphql*
 
 

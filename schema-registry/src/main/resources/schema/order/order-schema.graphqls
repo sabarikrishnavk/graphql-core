@@ -1,0 +1,8 @@
+type Query {
+    findcart(cartid: String!  ):ReturnCart
+    additem(skuid:String! , quantity:Int!, fulfillment:String!) : ReturnCart
+    updateitem(cartitemid:String! , quantity:Int!, shipmode:String!, addressid: String!) : ReturnCart
+    cartpayment(cartId:String!, paymentid:String! ) : ReturnCart
+}
+
+

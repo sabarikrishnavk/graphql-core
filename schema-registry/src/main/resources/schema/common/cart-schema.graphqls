@@ -1,25 +1,3 @@
-type Query {
-    discountSkuLocation(skuid: String!, location: String! ): [Discounts]
-    discountBySku(skuid: String!  ): [Discounts]
-}
-type Mutation {
-    evaluatePromotion(cart: Cart!): ReturnCart
-}
-
-type Sku @key(fields: "skuid")  @extends {
-    skuid: String! @external
-    price: Float!
-    attributes:[Attributes]
-}
-
-type Attributes{
-    attributeid:String!
-    name : String!
-    value: String!
-    searchable: Boolean
-    promotionable: Boolean
-    itemdefining: Boolean
-}
 
 input Cart{
     cartid : String!
@@ -27,12 +5,21 @@ input Cart{
     items :[CartItem]!
     totalprice :Float
 }
+input CartAddress{
+    address1: String!
+    address2: String!
+    address3: String!
+    city: String!
+    state: String!
+
+}
 input CartItem{
     skuid : String!
     quantity :Float!
     shipmode: String
 }
 input CartPayment{
+    paymentid: String!
     paymenttype : String!
     price :Float!
 }
@@ -48,6 +35,7 @@ type ReturnCart{
     discounts :[Discounts]
 }
 type ReturnCartItem{
+    cartitemid:String!
     skuid : String!
     quantity :Float!
     price :Float!
@@ -60,15 +48,4 @@ type ReturnCartPayment{
     quantity :Float!
     price :Float!
     discounts :[Discounts]
-}
-type Discounts {
-    location: String!
-    promotionid: String!
-    discount : Float!
-    discounttype: DiscountType
-}
-enum DiscountType {
-    PERCENTAGE_OFF
-    AMOUNT_OFF
-    FIXED_AMOUNT
 }

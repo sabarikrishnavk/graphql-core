@@ -11,6 +11,7 @@ jwt:
 dgs:
   graphql:
     schema-locations:
-      - classpath*:**/catalog-schema.graphql*
+      - classpath*:**/common/attributes-schema.graphql*
+      - classpath*:**/catalog/catalog-schema.graphql*
 
 
