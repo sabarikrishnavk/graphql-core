@@ -22,7 +22,10 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
             discounts?.forEach {
                     discount -> totaldiscount = totaldiscount.plus(discount!!.discount)
             }
-            var returnCartItem = ReturnCartItem("",request.skuid, request.quantity,    request.quantity.times( request.price ).minus(totaldiscount) , request.price,totaldiscount, discounts)
+            var returnCartItem = ReturnCartItem("",request.skuid, request.quantity,
+                request.quantity.times( request.price ).minus(totaldiscount) ,
+                request.shipmode,
+                request.price,totaldiscount, discounts)
 
 
             results.add(returnCartItem)
@@ -46,7 +49,9 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
         kieSession.dispose()
 
         result.discounts.forEach {
-            discounts.add(Discounts(request.location!! ,skuid, it.promotionid , it.discount, DiscountType.FIXED_AMOUNT ) )
+            discounts.add(Discounts(
+                request.location!! ,skuid, it.promotionid ,
+                it.discount, DiscountType.FIXED_AMOUNT ) )
         }
         return discounts
     }

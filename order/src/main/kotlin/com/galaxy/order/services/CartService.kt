@@ -11,4 +11,10 @@ class CartService {
         return ReturnCart(orderId,0.0, 0.0, 0.0, 0.0 ,
             listOf(),null)
     }
+
+    fun createCart(userId: String?, skuid: String, quantity: Int, fulfillment: String): ReturnCart {
+
+        return ReturnCart("CART1",0.0, 0.0, 0.0, 0.0 ,
+            listOf(),null)
+    }
 }

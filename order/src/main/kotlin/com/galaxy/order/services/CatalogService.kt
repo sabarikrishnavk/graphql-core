@@ -50,7 +50,7 @@ class CatalogService (val restTemplate: RestTemplate , val urlProperties: UrlPro
                 "}"
         val requestHeaders = HttpHeaders()
         requestHeaders.set(HEADER_AUTH,context.bearerToken)
-        //headers.forEach(requestHeaders::put)
+        //
 
         val response =
             graphQLClient.executeQuery(QUERY, variables, "skuQuery",
@@ -58,8 +58,10 @@ class CatalogService (val restTemplate: RestTemplate , val urlProperties: UrlPro
 
                     /**
                      * Use RestTemplate to call the GraphQL service.
-                     * The response type should simply be String, because the parsing will be done by the GraphQLClient.
+                     * The response type should simply be String,
+                     * because the parsing will be done by the GraphQLClient.
                      */
+
                     val exchange: ResponseEntity<String> = restTemplate.exchange(
                         url, HttpMethod.POST, HttpEntity<Any?>(body, requestHeaders),
                         String::class.java

@@ -39,13 +39,14 @@ type ReturnCartItem{
     skuid : String!
     quantity :Float!
     price :Float!
+    shipmode: String
     skuprice :Float!
     discount :Float!
     discounts :[Discounts]
 }
 type ReturnCartPayment{
-    skuid : String!
-    quantity :Float!
+    paymentid: String!
+    paymenttype : String!
     price :Float!
     discounts :[Discounts]
 }
