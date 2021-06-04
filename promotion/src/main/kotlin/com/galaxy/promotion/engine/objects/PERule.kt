@@ -1,4 +1,4 @@
-package com.galaxy.promotion.engine
+package com.galaxy.promotion.engine.objects
 
 import java.lang.StringBuilder
 

@@ -11,3 +11,4 @@ enum DiscountType {
     AMOUNT_OFF
     FIXED_AMOUNT
 }
+

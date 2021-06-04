@@ -1,7 +1,7 @@
 package com.galaxy.promotion.services
 
 import com.galaxy.foundation.logger.EventLogger
-import com.galaxy.promotion.engine.*
+import com.galaxy.promotion.engine.objects.*
 import com.galaxy.promotion.util.PromotionEventType
 import org.springframework.stereotype.Service
 import java.util.*

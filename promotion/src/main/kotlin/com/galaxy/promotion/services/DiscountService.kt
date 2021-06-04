@@ -15,7 +15,11 @@ class DiscountService {
     }
     fun discounts() :List<Discounts>{
         return listOf(
-            Discounts(  promotionid =  "PROMOID11" ,skuid = "SKU1", location = "STR1", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
+            Discounts(  promotionid =  "PROMOID11" ,
+                skuid = "SKU1",
+                location = "STR1",
+                discount =  25.0 ,
+                discounttype = DiscountType.AMOUNT_OFF),
             Discounts(  promotionid =  "PROMOID12" ,skuid = "SKU2", location = "STR1", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
             Discounts(  promotionid =  "PROMOID21" ,skuid = "SKU1", location = "STR2", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
             Discounts(  promotionid =  "PROMOID22" ,skuid = "SKU2", location = "STR2", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF)

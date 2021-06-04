@@ -1,8 +1,6 @@
-package com.galaxy.promotion.engine
+package com.galaxy.promotion.engine.objects
 
 import com.google.gson.Gson
-import java.util.ArrayList
-import java.util.List
 
 /**
  * Result interface and possible results
@@ -16,7 +14,7 @@ class PEResult{
     }
 
     fun addPromotion( promotion:String){
-        add(gson.fromJson<PEDiscount>(promotion,PEDiscount::class.java))
+        add(gson.fromJson<PEDiscount>(promotion, PEDiscount::class.java))
     }
 }
 class PEDiscount(

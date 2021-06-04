@@ -3,6 +3,10 @@ package com.galaxy.promotion.engine
 import com.galaxy.promotion.codegen.types.DiscountType
 import com.galaxy.promotion.codegen.types.Discounts
 import com.galaxy.promotion.codegen.types.ReturnCartItem
+import com.galaxy.promotion.engine.objects.PEOrderRequest
+import com.galaxy.promotion.engine.objects.PERequest
+import com.galaxy.promotion.engine.objects.PEResult
+import com.galaxy.promotion.engine.objects.PESkuRequest
 import org.kie.api.runtime.KieContainer
 import org.springframework.stereotype.Component
 import java.lang.Exception
@@ -37,7 +41,7 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
         return fireRules(request,null)
     }
 
-    private fun fireRules(request: PERequest,skuid: String?): MutableList<Discounts?> {
+    private fun fireRules(request: PERequest, skuid: String?): MutableList<Discounts?> {
         var discounts = mutableListOf<Discounts?>()
 
         val result = PEResult()

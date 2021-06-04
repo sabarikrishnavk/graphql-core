@@ -3,8 +3,7 @@ package com.galaxy.promotion.controller
 import com.galaxy.foundation.context.CustomContext
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.promotion.codegen.types.*
-import com.galaxy.promotion.engine.PEOrderRequest
-import com.galaxy.promotion.engine.PESkuRequest
+import com.galaxy.promotion.engine.objects.PESkuRequest
 import com.galaxy.promotion.engine.PromotionEngine
 import com.galaxy.promotion.services.CatalogService
 import com.netflix.graphql.dgs.DgsComponent

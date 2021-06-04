@@ -8,7 +8,7 @@ discount
 
 package com.galaxy.promotion.engine
 
-global com.galaxy.promotion.engine.PEResult result;
+global com.galaxy.promotion.engine.objects.PEResult result;
 
 template "promotion_rule"
 

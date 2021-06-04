@@ -2,26 +2,18 @@
 package com.galaxy.promotion.engine
 
 import com.galaxy.foundation.logger.EventLogger
-import com.galaxy.foundation.scalars.DateTimeScalarRegistration
-import com.galaxy.promotion.codegen.types.DiscountType
-import com.galaxy.promotion.codegen.types.Discounts
 import com.galaxy.promotion.config.DroolsConfiguration
-import com.galaxy.promotion.services.DiscountService
+import com.galaxy.promotion.engine.objects.*
 import com.galaxy.promotion.services.PromotionService
 import com.google.gson.Gson
-import com.netflix.graphql.dgs.DgsQueryExecutor
-import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
-import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.kie.api.runtime.KieContainer
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import java.util.*
-import kotlin.collections.ArrayList
 
 @SpringBootTest(classes = [PromotionEngine::class, EventLogger::class,DroolsConfiguration::class, PromotionService::class])
 class PromotionEngineTest {
