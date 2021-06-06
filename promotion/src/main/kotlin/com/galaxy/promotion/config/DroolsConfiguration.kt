@@ -2,22 +2,18 @@ package com.galaxy.promotion.config
 
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.promotion.engine.*
-import com.galaxy.promotion.services.PromotionService
+import com.galaxy.promotion.services.DiscountService
 import com.galaxy.promotion.util.PromotionEventType
 import org.drools.template.ObjectDataCompiler
 import org.kie.api.KieServices;
-import org.kie.api.builder.KieBuilder;
-import org.kie.api.builder.KieFileSystem;
-import org.kie.api.builder.KieModule;
 import org.kie.api.runtime.KieContainer;
-import org.kie.internal.io.ResourceFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.lang.Exception
 import java.util.*
 
 @Configuration
-class DroolsConfiguration(val promotionService: PromotionService, val eventLogger: EventLogger) {
+class DroolsConfiguration(val discountService:DiscountService, val eventLogger: EventLogger) {
 
     @Bean
     fun getKieContainer(): KieContainer? {
@@ -38,7 +34,7 @@ class DroolsConfiguration(val promotionService: PromotionService, val eventLogge
 
     @Throws(Exception::class)
     fun applyRuleTemplate(): String {
-        val activeSkuRules = promotionService.activeRules();
+        val activeSkuRules = discountService.activeRules();
 
 
         eventLogger.log(PromotionEventType.PROMO_ENGINE_LOAD,"Get Rules in applyRuleTemplate ",activeSkuRules)

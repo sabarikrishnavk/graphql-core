@@ -17,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
-@SpringBootTest(classes = [PromotionController::class,EventLogger::class,DiscountService ::class, DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
+@SpringBootTest(classes = [PromotionController::class,
+                            EventLogger::class,DiscountService ::class,
+                            DgsAutoConfiguration::class,
+                            DateTimeScalarRegistration::class])
 class PromotionControllerTest {
 
     @Autowired
@@ -26,13 +29,15 @@ class PromotionControllerTest {
     @MockBean
     lateinit var discountService: DiscountService
 
+    @Autowired
+    lateinit var  eventLogger: EventLogger
 
 
     @BeforeEach
     fun before() {
         `when`(discountService.discounts(Mockito.anyList(), Mockito.anyString())).thenAnswer {
 
-            DiscountService().dummyDiscounts();
+            DiscountService(eventLogger).dummyDiscounts();
         }
 
     }

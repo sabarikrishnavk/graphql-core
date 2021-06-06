@@ -2,13 +2,9 @@
 package com.galaxy.promotion.engine
 
 import com.galaxy.foundation.logger.EventLogger
-import com.galaxy.promotion.codegen.types.Operator
-import com.galaxy.promotion.codegen.types.PromotionCondition
 import com.galaxy.promotion.config.DroolsConfiguration
 import com.galaxy.promotion.engine.objects.*
 import com.galaxy.promotion.services.DiscountService
-import com.galaxy.promotion.services.PromotionService
-import com.google.gson.Gson
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -19,11 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import java.util.*
 
 @SpringBootTest(classes = [PromotionEngine::class, EventLogger::class,PromotionCache::class,
-    DiscountService::class,DroolsConfiguration::class, PromotionService::class])
+    DiscountService::class,DroolsConfiguration::class])
 class PromotionEngineTest {
 
-    @MockBean
-    lateinit var promotionService: PromotionService
 
     @Autowired
     lateinit var  droolsConfiguration: DroolsConfiguration
@@ -45,11 +39,7 @@ class PromotionEngineTest {
     @BeforeEach
     fun before()  {
 
-
-        `when`(promotionService.activeRules()).thenAnswer {
-            PromotionService(eventLogger,discountService).activeRules()
-        }
-        droolsConfiguration = DroolsConfiguration(promotionService,eventLogger )
+        droolsConfiguration = DroolsConfiguration(discountService,eventLogger )
         promotionEngine= PromotionEngine(droolsConfiguration.getKieContainer() , promotionCache);
     }
 

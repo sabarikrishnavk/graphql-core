@@ -3,13 +3,11 @@ package com.galaxy.promotion.service
 import com.galaxy.foundation.context.CustomContext
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.promotion.services.CatalogService
-import com.galaxy.promotion.services.PromotionService
 import com.galaxy.promotion.util.UrlProperties
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.TestPropertySource
 import org.springframework.web.client.RestTemplate
 
