@@ -17,14 +17,14 @@ class PEResult{
         add(gson.fromJson<PEDiscount>(promotion, PEDiscount::class.java))
     }
 }
-class PEDiscount(
-    var promotionid :String ,
-    var discount: Double
-){
+class PEDiscount(val promotionid:String, val discount:Double){
+
     override fun toString(): String {
         return gson.toJson(this).replace("\"","'")
     }
+    constructor() : this("",0.0) {
+    }
 }
-class PEAction(
-    var discount: PEDiscount
-)
+class PEAction (val discount: PEDiscount){
+    constructor():this(PEDiscount())
+}

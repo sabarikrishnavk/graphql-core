@@ -1,6 +1,9 @@
 package com.galaxy.promotion.services
 
 import com.galaxy.foundation.logger.EventLogger
+import com.galaxy.promotion.codegen.types.Operator
+import com.galaxy.promotion.codegen.types.PromotionCondition
+import com.galaxy.promotion.codegen.types.PromotionType
 import com.galaxy.promotion.engine.objects.*
 import com.galaxy.promotion.util.PromotionEventType
 import com.google.gson.Gson
@@ -8,92 +11,93 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class PromotionService( val eventLogger: EventLogger){
+class PromotionService( val eventLogger: EventLogger , val discountService: DiscountService){
     val gson = Gson()
 
-    fun activeSKURules():List<PERule>{
+    fun activeRules():MutableList<PERule>{
 
-        val rule1 = orderItemRule1()
+        val promotions = discountService.getActivePromotions()
 
-        val rule1String = rule1.json()
-        println(rule1String );
+        val rules = mutableListOf<PERule>()
+        promotions.forEach {
+            val rule = PERule()
+            rule.conditions = it.conditions
+            rule.action = PEAction(PEDiscount(it.promotionid,it.discount))
+            rule.requestClassName = when (it.promotionType.name) {
 
-        val rule11 = gson.fromJson<PERule>(rule1String, PERule::class.java)
+                PromotionType.ORDER_PERCENT_OFF.name -> PEOrderRequest::class.java.name
+                PromotionType.ORDER_AMOUNT_OFF.name -> PEOrderRequest::class.java.name
+                PromotionType.ORDER_FREE_GIFT.name -> PEOrderRequest::class.java.name
 
+                PromotionType.SHIPPING_FIXED_PRICE.name -> PEOrderRequest::class.java.name
+                PromotionType.SHIPPING_AMOUNT_OFF.name -> PEOrderRequest::class.java.name
 
-        val rule2 = orderItemRule2()
-        val rule3 = orderRule1()
-        eventLogger.log(PromotionEventType.PROMO_ENGINE_DATACOLLECTION,"getCurrentPRRules",rule1,rule2,rule3 )
-        return listOf(rule11,rule2,rule3)
+                PromotionType.SHIPPING_SKU_FIXED_PRICE.name -> PESkuRequest::class.java.name
+                PromotionType.SKU_TOTAL_PERCENT_OFF.name -> PESkuRequest::class.java.name
+                PromotionType.SKU_TOTAL_AMOUNT_OFF.name -> PESkuRequest::class.java.name
+                PromotionType.SKU_TOTAL_FIXED_PRICE.name -> PESkuRequest::class.java.name
+
+                PromotionType.CROSS_SKU_PERCENT_OFF.name -> PESkuRequest::class.java.name
+                PromotionType.CROSS_SKU_AMOUNT_OFF.name -> PESkuRequest::class.java.name
+                PromotionType.CROSS_SKU_FIXED_PRICE.name -> PESkuRequest::class.java.name
+
+                PromotionType.SKU_ITEM_PERCENT_OFF.name -> PESkuRequest::class.java.name
+                PromotionType.SKU_ITEM_AMOUNT_OFF.name -> PESkuRequest::class.java.name
+                PromotionType.SKU_ITEM_FIXED_PRICE.name -> PESkuRequest::class.java.name
+                else ->  PERequest::class.java.name
+            }
+
+            rules.add(rule)
+        }
+        eventLogger.log(PromotionEventType.PROMO_ENGINE_DATACOLLECTION,"getCurrentPRRules",rules )
+        return rules
     }
 
-    private fun orderItemRule1(): PERule {
-        val highValueOrderWidgetsIncRule = PERule()
-        val highValueOrderCondition = PECondition()
-        highValueOrderCondition.field = "price"
-        highValueOrderCondition.operator = PECondition.Operator.GREATER_THAN
-        highValueOrderCondition.value = 100.0
-        val widgetsIncCustomerCondition = PECondition()
-        widgetsIncCustomerCondition.field = "skuid"
-        widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
-        widgetsIncCustomerCondition.value = "SKU1"
+    private fun sku1(): PERule {
+        val rule = PERule()
+
+        val condition1 = PromotionCondition( "price", "500.0", Operator.GREATER_THAN)
+        val condition2 = PromotionCondition( "skuid", "SKU1,SKU2", Operator.IN)
+//        val condition3 = PromotionCondition( "attr.color", "blue", Operator.EQUAL_TO)
 
         val action = PEAction(
             PEDiscount( promotionid = "PROMID1" ,discount = 15.0  )
         )
 
-        highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition, widgetsIncCustomerCondition)
-        highValueOrderWidgetsIncRule.action = action
-        highValueOrderWidgetsIncRule.requestClassName = PESkuRequest::class.java.name
-
-
-
-        return highValueOrderWidgetsIncRule
+        rule.conditions = mutableListOf(condition1, condition2)
+        rule.action = action
+        rule.requestClassName = PESkuRequest::class.java.name
+        return rule
     }
-    private fun orderItemRule2(): PERule {
-        val highValueOrderWidgetsIncRule = PERule()
+    private fun sku2(): PERule {
+        val rule = PERule()
 
-        val highValueOrderCondition1 = PECondition()
-        highValueOrderCondition1.field = "price"
-        highValueOrderCondition1.operator = PECondition.Operator.GREATER_THAN
-        highValueOrderCondition1.value = 50.0
-
-
-        val highValueOrderCondition2 = PECondition()
-        highValueOrderCondition2.field = "price"
-        highValueOrderCondition2.operator = PECondition.Operator.LESS_THAN
-        highValueOrderCondition2.value = 100.0
-
-        val widgetsIncCustomerCondition = PECondition()
-        widgetsIncCustomerCondition.field = "skuid"
-        widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
-        widgetsIncCustomerCondition.value = "SKU1"
 
         val action = PEAction(
-            PEDiscount( promotionid = "PROMID1" ,discount = 15.0  )
+            PEDiscount( promotionid = "PROMID2" ,discount = 15.0  )
         )
 
-        highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition1,highValueOrderCondition2, widgetsIncCustomerCondition)
-        highValueOrderWidgetsIncRule.action = action
-        highValueOrderWidgetsIncRule.requestClassName = PESkuRequest::class.java.name
-        return highValueOrderWidgetsIncRule
+        val condition1 = PromotionCondition( "price", "100.0", Operator.GREATER_THAN)
+        val condition2 = PromotionCondition( "skuid", "SKU1", Operator.IN)
+        val condition3 = PromotionCondition(  "price", "500.0", Operator.LESS_THAN)
+        rule.conditions = mutableListOf(condition1, condition2,condition3)
+        rule.action = action
+        rule.requestClassName = PESkuRequest::class.java.name
+        return rule
     }
     private fun orderRule1(): PERule {
-        val highValueOrderWidgetsIncRule = PERule()
+        val rule = PERule()
 
-        val highValueOrderCondition1 = PECondition()
-        highValueOrderCondition1.field =  "totalskuprice"
-        highValueOrderCondition1.operator = PECondition.Operator.GREATER_THAN
-        highValueOrderCondition1.value = 250.0
+        val condition1 = PromotionCondition( "totalskuprice", "250.0", Operator.GREATER_THAN)
 
 
         val action = PEAction(
             PEDiscount( promotionid = "PROMID3" ,discount = 15.0  )
         )
 
-        highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition1)
-        highValueOrderWidgetsIncRule.action = action
-        highValueOrderWidgetsIncRule.requestClassName = PEOrderRequest::class.java.name
-        return highValueOrderWidgetsIncRule
+        rule.conditions = mutableListOf(condition1)
+        rule.action = action
+        rule.requestClassName = PEOrderRequest::class.java.name
+        return rule
     }
 }

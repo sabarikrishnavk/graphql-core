@@ -20,6 +20,10 @@ class DiscountService {
         return dummyPromotions().filter {  it.promotionid == promotionid }.get(0)
     }
 
+    fun getActivePromotions():List<Promotion>{
+        return dummyPromotions();
+    }
+
     fun dummyDiscounts() :List<Discounts>{
         return listOf(
             Discounts(  location = "STR1" ,
@@ -61,7 +65,13 @@ class DiscountService {
                     cartdesc = null,
                     pdpdesc = null,
                     plpdesc = null,
-                    admindesc = null
+                    admindesc = null,
+
+                    conditions =mutableListOf(
+                        PromotionCondition( "price", "100.0", Operator.GREATER_THAN),
+                        PromotionCondition( "skuid", "SKU1", Operator.IN),
+                        PromotionCondition(  "price", "500.0", Operator.LESS_THAN)
+                    )
             ),
             Promotion(
                 promotionid = "PROMID2",
@@ -76,8 +86,13 @@ class DiscountService {
                 cartdesc = null,
                 pdpdesc = null,
                 plpdesc = null,
-                admindesc = null
-            ),
+                admindesc = null,
+                conditions =mutableListOf(
+                    PromotionCondition( "price", "500.0", Operator.GREATER_THAN),
+                    PromotionCondition( "skuid", "SKU1", Operator.IN)
+                )
+            )
+            ,
             Promotion(
                 promotionid = "PROMID3",
                 promotionType =  PromotionType.ORDER_AMOUNT_OFF,
@@ -91,7 +106,10 @@ class DiscountService {
                 cartdesc = null,
                 pdpdesc = null,
                 plpdesc = null,
-                admindesc = null
+                admindesc = null,
+                conditions =mutableListOf(
+                    PromotionCondition( "totalskuprice", "250.0", Operator.GREATER_THAN)
+                )
             )
         )
     }

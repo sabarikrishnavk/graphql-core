@@ -2,8 +2,11 @@
 package com.galaxy.promotion.engine
 
 import com.galaxy.foundation.logger.EventLogger
+import com.galaxy.promotion.codegen.types.Operator
+import com.galaxy.promotion.codegen.types.PromotionCondition
 import com.galaxy.promotion.config.DroolsConfiguration
 import com.galaxy.promotion.engine.objects.*
+import com.galaxy.promotion.services.DiscountService
 import com.galaxy.promotion.services.PromotionService
 import com.google.gson.Gson
 import org.assertj.core.api.Assertions.assertThat
@@ -15,7 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import java.util.*
 
-@SpringBootTest(classes = [PromotionEngine::class, EventLogger::class,DroolsConfiguration::class, PromotionService::class])
+@SpringBootTest(classes = [PromotionEngine::class, EventLogger::class,PromotionCache::class,
+    DiscountService::class,DroolsConfiguration::class, PromotionService::class])
 class PromotionEngineTest {
 
     @MockBean
@@ -24,6 +28,8 @@ class PromotionEngineTest {
     @Autowired
     lateinit var  droolsConfiguration: DroolsConfiguration
 
+    @Autowired
+    lateinit var discountService: DiscountService
 
     @Autowired
     lateinit var  promotionCache: PromotionCache
@@ -39,43 +45,9 @@ class PromotionEngineTest {
     @BeforeEach
     fun before()  {
 
-        val highValueOrderWidgetsIncRule = PERule()
-        val highValueOrderCondition = PECondition()
-        highValueOrderCondition.field = "price"
-        highValueOrderCondition.operator = PECondition.Operator.GREATER_THAN
-        highValueOrderCondition.value = 100.0
-//        val widgetsIncCustomerCondition = PECondition()
-//        widgetsIncCustomerCondition.field = "skuid"
-//        widgetsIncCustomerCondition.operator = PECondition.Operator.EQUAL_TO
-//        widgetsIncCustomerCondition.value = "SKU1"
 
-
-        val widgetsIncCustomerCondition = PECondition()
-        widgetsIncCustomerCondition.field = "skuid"
-        widgetsIncCustomerCondition.operator = PECondition.Operator.IN
-        widgetsIncCustomerCondition.value = "SKU1,SKU2"
-
-
-        val sizeCondition = PECondition()
-        sizeCondition.field = "attr.color"
-        sizeCondition.operator = PECondition.Operator.EQUAL_TO
-        sizeCondition.value = "blue"
-
-        val action = PEAction(
-                PEDiscount( promotionid = "PROMID1" ,discount = 15.0  )
-        )
-
-        highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition, widgetsIncCustomerCondition,sizeCondition)
-        highValueOrderWidgetsIncRule.action= action
-        highValueOrderWidgetsIncRule.requestClassName= PESkuRequest::class.java.name
-
-        val gson = Gson().toJson(highValueOrderWidgetsIncRule).replace("\"","'")
-        println(gson);
-
-
-        `when`(promotionService.activeSKURules()).thenAnswer {
-
-            listOf(highValueOrderWidgetsIncRule)
+        `when`(promotionService.activeRules()).thenAnswer {
+            PromotionService(eventLogger,discountService).activeRules()
         }
         droolsConfiguration = DroolsConfiguration(promotionService,eventLogger )
         promotionEngine= PromotionEngine(droolsConfiguration.getKieContainer() , promotionCache);
@@ -106,7 +78,7 @@ class PromotionEngineTest {
         request.add(skuRequest1);
 
         val result1 = promotionEngine.evaluateSkuRequest(request);
-        assertThat(result1!!.get(0)!!.discounts!!.get(0)!!.discount).isEqualTo(10.0)
+        assertThat(result1!!.get(0)!!.discounts!!.get(0)!!.discount).isEqualTo(15.0)
 
         request = mutableListOf<PESkuRequest>()
         request.add(skuRequest2);
@@ -118,7 +90,7 @@ class PromotionEngineTest {
         request.add(skuRequest3);
 
         val result3 = promotionEngine.evaluateSkuRequest(request)
-        assertThat(result3!!.get(0)!!.discounts!!.get(0)!!.discount).isEqualTo(10.0)
+        assertThat(result3!!.get(0)!!.discounts!!.get(0)!!.discount).isEqualTo(15.0)
 //        assertThat(result3.discounts.size).isEqualTo(0)
 
     }

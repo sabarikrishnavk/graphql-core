@@ -38,7 +38,7 @@ class DroolsConfiguration(val promotionService: PromotionService, val eventLogge
 
     @Throws(Exception::class)
     fun applyRuleTemplate(): String {
-        val activeSkuRules = promotionService.activeSKURules();
+        val activeSkuRules = promotionService.activeRules();
 
 
         eventLogger.log(PromotionEventType.PROMO_ENGINE_LOAD,"Get Rules in applyRuleTemplate ",activeSkuRules)
@@ -49,7 +49,7 @@ class DroolsConfiguration(val promotionService: PromotionService, val eventLogge
             val ruleMap: MutableMap<String, Any> = HashMap()
             ruleMap["rule"] = rule
             ruleMap["request"] = rule.requestClassName
-            ruleMap["discount"] = rule.action!!.discount
+            ruleMap["discount"] = rule.action.discount
             rules.add(ruleMap);
         }
 

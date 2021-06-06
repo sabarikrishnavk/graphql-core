@@ -1,10 +1,12 @@
 package com.galaxy.promotion.engine.objects
 
+import com.galaxy.promotion.codegen.types.PromotionCondition
+import com.galaxy.promotion.codegen.types.Operator
 import java.lang.StringBuilder
 
 class PERule {
-    var conditions: List<PECondition>? = null
-    var action: PEAction? =null
+    var conditions: List<PromotionCondition?> = listOf()
+    var action: PEAction = PEAction()
     var requestClassName: String =""
 
 
@@ -13,19 +15,18 @@ class PERule {
     }
     override fun toString(): String {
         val statementBuilder = StringBuilder()
-        for (condition in conditions!!) {
-            var operator: String? = null
-            operator = when (condition?.operator) {
-                PECondition.Operator.EQUAL_TO -> "=="
-                PECondition.Operator.NOT_EQUAL_TO -> "!="
-                PECondition.Operator.GREATER_THAN -> ">"
-                PECondition.Operator.LESS_THAN -> "<"
-                PECondition.Operator.GREATER_THAN_OR_EQUAL_TO -> ">="
-                PECondition.Operator.LESS_THAN_OR_EQUAL_TO -> "<="
-                PECondition.Operator.IN -> "in"
+        for (condition in conditions) {
+            var operator = when (condition!!.operator.name) {
+                Operator.EQUAL_TO.name -> "=="
+                Operator.NOT_EQUAL_TO.name -> "!="
+                Operator.GREATER_THAN.name -> ">"
+                Operator.LESS_THAN.name -> "<"
+                Operator.GREATER_THAN_OR_EQUAL_TO.name -> ">="
+                Operator.LESS_THAN_OR_EQUAL_TO.name -> "<="
+                Operator.IN.name -> "in"
                 else ->  "=="
             }
-            if(condition?.operator!!.equals(PECondition.Operator.IN) && condition.value is String){
+            if(condition.operator!!.equals(Operator.IN) && condition.value is String){
 
                 val inConditions = StringBuilder()
                 inConditions.append(condition.field).append(" in (")
