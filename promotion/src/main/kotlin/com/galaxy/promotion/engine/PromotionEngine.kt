@@ -1,7 +1,7 @@
 package com.galaxy.promotion.engine
 
-import com.galaxy.promotion.codegen.types.DiscountType
 import com.galaxy.promotion.codegen.types.Discounts
+import com.galaxy.promotion.codegen.types.Promotion
 import com.galaxy.promotion.codegen.types.ReturnCartItem
 import com.galaxy.promotion.engine.objects.PEOrderRequest
 import com.galaxy.promotion.engine.objects.PERequest
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 import java.lang.Exception
 
 @Component
-class PromotionEngine(private val kieContainer: KieContainer?) {
+class PromotionEngine(private val kieContainer: KieContainer?, val promotionCache: PromotionCache) {
 
 
     @Throws(Exception::class)
@@ -53,9 +53,14 @@ class PromotionEngine(private val kieContainer: KieContainer?) {
         kieSession.dispose()
 
         result.discounts.forEach {
-            discounts.add(Discounts(
-                request.location!! ,skuid, it.promotionid ,
-                it.discount, DiscountType.FIXED_AMOUNT ) )
+            
+            var promotion =  promotionCache.getPromotion(it.promotionid)
+            
+            discounts.add(  Discounts(  location = request.location!! , skuid =  skuid,
+                                        discount = promotion.discount , shipmode = null,
+                                        promotion =promotion
+                                        )
+                                )
         }
         return discounts
     }

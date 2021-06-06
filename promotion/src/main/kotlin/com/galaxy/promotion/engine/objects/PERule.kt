@@ -7,6 +7,10 @@ class PERule {
     var action: PEAction? =null
     var requestClassName: String =""
 
+
+    fun json(): String {
+        return gson.toJson(this).replace("\"","'")
+    }
     override fun toString(): String {
         val statementBuilder = StringBuilder()
         for (condition in conditions!!) {

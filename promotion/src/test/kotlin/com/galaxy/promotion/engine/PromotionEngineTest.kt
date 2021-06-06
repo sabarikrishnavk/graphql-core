@@ -24,6 +24,10 @@ class PromotionEngineTest {
     @Autowired
     lateinit var  droolsConfiguration: DroolsConfiguration
 
+
+    @Autowired
+    lateinit var  promotionCache: PromotionCache
+
     @Autowired
     lateinit var  eventLogger: EventLogger
 
@@ -58,8 +62,7 @@ class PromotionEngineTest {
         sizeCondition.value = "blue"
 
         val action = PEAction(
-            PEDiscount(promotionid = "PROMO1",promotiondescription = "First promo",
-                discount = 10.0 , 0.0,"","")
+                PEDiscount( promotionid = "PROMID1" ,discount = 15.0  )
         )
 
         highValueOrderWidgetsIncRule.conditions = Arrays.asList(highValueOrderCondition, widgetsIncCustomerCondition,sizeCondition)
@@ -75,7 +78,7 @@ class PromotionEngineTest {
             listOf(highValueOrderWidgetsIncRule)
         }
         droolsConfiguration = DroolsConfiguration(promotionService,eventLogger )
-        promotionEngine= PromotionEngine(droolsConfiguration.getKieContainer());
+        promotionEngine= PromotionEngine(droolsConfiguration.getKieContainer() , promotionCache);
     }
 
     @Test

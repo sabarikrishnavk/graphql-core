@@ -3,7 +3,6 @@ package com.galaxy.promotion.controller
 
 import com.galaxy.foundation.logger.EventLogger
 import com.galaxy.foundation.scalars.DateTimeScalarRegistration
-import com.galaxy.promotion.codegen.types.DiscountType
 import com.galaxy.promotion.codegen.types.Discounts
 import com.galaxy.promotion.services.DiscountService
 import com.netflix.graphql.dgs.DgsQueryExecutor
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
-@SpringBootTest(classes = [PromotionController::class,EventLogger::class,  DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
+@SpringBootTest(classes = [PromotionController::class,EventLogger::class,DiscountService ::class, DgsAutoConfiguration::class, DateTimeScalarRegistration::class])
 class PromotionControllerTest {
 
     @Autowired
@@ -28,17 +27,12 @@ class PromotionControllerTest {
     lateinit var discountService: DiscountService
 
 
+
     @BeforeEach
     fun before() {
         `when`(discountService.discounts(Mockito.anyList(), Mockito.anyString())).thenAnswer {
 
-             listOf(
-                Discounts(  promotionid =  "PROMOID11" ,skuid = "SKU1", location = "STR1", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
-                Discounts(  promotionid =  "PROMOID12" ,skuid = "SKU2", location = "STR1", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
-                Discounts(  promotionid =  "PROMOID21" ,skuid = "SKU1", location = "STR2", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF),
-                Discounts(  promotionid =  "PROMOID22" ,skuid = "SKU2", location = "STR2", discount =  25.0 , discounttype = DiscountType.AMOUNT_OFF)
-
-            )
+            DiscountService().dummyDiscounts();
         }
 
     }
@@ -51,13 +45,13 @@ class PromotionControllerTest {
               discountSkusLocation(skuids:["SKU1"],location:"WH1"){
                 skuid
                 location
-                discount 
+                discount  
               } 
             }
         """.trimIndent(), "data.discountSkusLocation[*].discount"
         )
 
-        assertThat(price[0]).isEqualTo(25.0)
+        assertThat(price[0]).isEqualTo(15.0)
     }
 
     @Test
@@ -94,6 +88,6 @@ class PromotionControllerTest {
             graphQLQueryRequest.serialize(),
             "data.discountSkusLocation[*].discount"
         )
-        assertThat(amountoff[0]).isEqualTo(25.0)
+        assertThat(amountoff[0]).isEqualTo(15.0)
     }
 }

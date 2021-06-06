@@ -19,11 +19,7 @@ class PEResult{
 }
 class PEDiscount(
     var promotionid :String ,
-    var promotiondescription: String ,
-    var discount: Double ,
-    var percentage: Double,
-    var freesku: String? ,
-    var shipmodemode: String?
+    var discount: Double
 ){
     override fun toString(): String {
         return gson.toJson(this).replace("\"","'")
