@@ -1,9 +1,6 @@
 server:
   port: 8086
 
-logging:
-  level:
-    org.springframework.security: DEBUG
 
 jwt:
   secretkey: GALAXY1456KEYROCKSSUPERMARIO123KEYS789HELPSALOTGALAXY1456KEYROCKSSUPERMARIO123KEYS789HELPSALOT
@@ -12,6 +9,7 @@ galaxy:
   url:
     catalog: http://localhost:8083/graphql
 
+
 dgs:
   graphql:
     schema-locations:
@@ -19,4 +17,27 @@ dgs:
       - classpath*:**/common/discounts-schema.graphql*
       - classpath*:**/promotion/promotion-schema.graphql*
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+spring:
+  application:
+    name: promotion
+  cloud:
+    config:
+      uri : http://localhost:8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    metrics:
+      distributions:
+        percentiles:
+          http.server.requests: 0.5, 0.75, 0.95, 0.98, 1.0
+          method.requests: 0.5, 0.75, 0.95, 0.98, 1.0
+      tags:
+        applications: ${spring.application.name}
 

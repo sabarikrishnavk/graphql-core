@@ -1,4 +1,4 @@
-package com.galaxy.price.controller
+package com.galaxy.inventory.controller
 
 import com.galaxy.inventory.codegen.types.Inventory
 import com.galaxy.inventory.codegen.types.Sku

@@ -5,7 +5,6 @@ import com.galaxy.inventory.codegen.client.InventorySkusLocationGraphQLQuery
 import com.galaxy.inventory.codegen.client.InventorySkusLocationProjectionRoot
 import com.galaxy.inventory.codegen.types.Inventory
 import com.galaxy.inventory.services.InventoryService
-import com.galaxy.price.controller.InventoryController
 import com.netflix.graphql.dgs.DgsQueryExecutor
 import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration
 import com.netflix.graphql.dgs.client.codegen.GraphQLQueryRequest

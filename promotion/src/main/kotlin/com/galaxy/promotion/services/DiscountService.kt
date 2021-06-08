@@ -94,7 +94,7 @@ class DiscountService (val eventLogger: EventLogger){
           )
     }
 
-    fun addPromotions(promotion:Promotion):Promotion {
+    fun savePromotions(promotion:Promotion): Promotion {
         promotions.add(promotion)
         return promotion;
     }

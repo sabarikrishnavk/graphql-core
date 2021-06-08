@@ -28,6 +28,8 @@ dependencies {
     api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
     api("com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer")
 
+    //api("org.springframework.cloud:spring-cloud-starter-config")
+
     api("com.graphql-java:graphql-java-extended-scalars:1.0")
     api("com.github.javafaker:javafaker:1.+")
 

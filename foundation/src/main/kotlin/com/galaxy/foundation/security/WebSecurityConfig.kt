@@ -1,15 +1,12 @@
-package com.galaxy.inventory.config
+package com.galaxy.foundation.security
 
 import com.galaxy.foundation.jwt.config.JwtAuthenticationEntryPoint
 import com.galaxy.foundation.jwt.config.JwtRequestFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -18,18 +15,15 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+open class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
-    private val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint? = null
+    val jwtAuthenticationEntryPoint: JwtAuthenticationEntryPoint? = null
 
     @Autowired
-    private val jwtUserDetailsService: UserDetailsService? = null
+    val jwtUserDetailsService: UserDetailsService? = null
 
     @Autowired
-    private val jwtRequestFilter: JwtRequestFilter? = null
+    val jwtRequestFilter: JwtRequestFilter? = null
     @Autowired
     @Throws(Exception::class)
     fun configureGlobal(auth: AuthenticationManagerBuilder) {
@@ -37,25 +31,27 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
+    open fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
 
     @Bean
     @Throws(Exception::class)
-    override fun authenticationManagerBean(): AuthenticationManager {
+    open override fun authenticationManagerBean(): AuthenticationManager {
         return super.authenticationManagerBean()
     }
 
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
+
 // We don't need CSRF for this example
-        httpSecurity.csrf().disable() // dont authenticate this particular request
+        httpSecurity.csrf().disable()// dont authenticate this particular request
             .authorizeRequests()
             .antMatchers("/graphiql").permitAll()
             .antMatchers("/actuator").permitAll()
+            .antMatchers("/actuator/*").permitAll()
             .antMatchers("/graphql").permitAll()
-            .anyRequest ().permitAll() //authenticated()
+            .anyRequest().authenticated()
             .and()
             .exceptionHandling()
             .authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
